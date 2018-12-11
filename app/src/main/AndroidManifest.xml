@@ -20,6 +20,8 @@
         <activity android:name=".ShareActivity"/>
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".SearchActivity"/>
+        <activity android:name=".EditProfileActivity">
+        </activity>
     </application>
 
 </manifest>
