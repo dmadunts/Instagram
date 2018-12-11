@@ -1,4 +1,24 @@
 <resources>
     <string name="app_name">Instagram</string>
     <string name="edit_profile_button">Edit Profile</string>
+    <string name="change_photo_btn">Change Photo</string>
+    <string name="name_label">Name</string>
+    <string name="username_label">Username</string>
+    <string name="website_label">Website</string>
+    <string name="bio_label">Bio</string>
+    <string name="private_information">Private Information</string>
+    <string name="email_label">E-mail Address</string>
+    <string name="name_input_hint">Name</string>
+    <string name="username_input_hint">Username</string>
+    <string name="website_input_hint">Website</string>
+    <string name="bio_input_hint">Bio</string>
+    <string name="e_mail_address_input_hint">E-mail Address</string>
+    <string name="phone_number_label">Phone Number</string>
+    <string name="phone_number_input_hint">Phone Number</string>
+    <string name="gender_label">Gender</string>
+    <string-array name="genders_array">
+        <item>Not Specified</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>
