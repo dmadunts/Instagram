@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         tools:context=".EditProfileActivity">
+
     <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/toolbar"
@@ -16,6 +17,7 @@
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
             <ImageView
                     android:id="@+id/close_image"
                     style="@style/toolbar_ic"
@@ -47,6 +49,7 @@
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
             <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/edit_profile_pic"
                     android:layout_width="100dp"

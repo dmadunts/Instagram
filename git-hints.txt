@@ -1,0 +1,3 @@
+Setting branch to exactly match the remote branch:
+git fetch origin
+git reset --hard origin/master
