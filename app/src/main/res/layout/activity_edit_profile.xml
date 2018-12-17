@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/change_photo_btn"
                     android:textSize="19sp"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/light_blue"
                     app:layout_constraintTop_toBottomOf="@id/edit_profile_pic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

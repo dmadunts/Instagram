@@ -16,6 +16,10 @@
     <string name="phone_number_label">Phone Number</string>
     <string name="phone_number_input_hint">Phone Number</string>
     <string name="gender_label">Gender</string>
+    <string name="email_login">Email</string>
+    <string name="password_login">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="create_account">Don\'t have an account? <b>Sign up.</b></string>
     <string-array name="genders_array">
         <item>Not Specified</item>
         <item>Male</item>
