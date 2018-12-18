@@ -9,4 +9,5 @@
     <color name="grey">#BBB</color>
     <color name="light_blue">#33B5E5</color>
     <color name="blue">#3897F0</color>
+    <color name="disabled_btn">#C3E0FA</color>
 </resources>
