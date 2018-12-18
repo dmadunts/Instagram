@@ -20,6 +20,8 @@
     <string name="password_login">Password</string>
     <string name="log_in">Log In</string>
     <string name="create_account">Don\'t have an account? <b>Sign up.</b></string>
+    <string name="instagram_label">instagram_label</string>
+    <string name="full_name">Full name</string>
     <string-array name="genders_array">
         <item>Not Specified</item>
         <item>Male</item>

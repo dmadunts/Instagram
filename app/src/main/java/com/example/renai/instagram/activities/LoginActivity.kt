@@ -1,4 +1,4 @@
-package com.example.renai.instagram
+package com.example.renai.instagram.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import com.example.renai.instagram.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
@@ -60,11 +60,11 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, Text
                     startActivity(Intent(this, HomeActivity::class.java))
                     finish()
                 } else {
-                    Toast.makeText(this, "Authorization error", Toast.LENGTH_SHORT)
+                    showToast("Authorization error")
                 }
             }
         } else {
-            Toast.makeText(this, "Please enter E-mail and password", Toast.LENGTH_SHORT).show()
+            showToast("Please enter e-mail and password")
         }
     }
 
