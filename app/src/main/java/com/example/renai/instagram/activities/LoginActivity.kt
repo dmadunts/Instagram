@@ -22,12 +22,13 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, Text
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         Log.d(TAG, "onCreate")
-        KeyboardVisibilityEvent.setEventListener(this, this)
 
-        login_btn.setOnClickListener(this)
+        KeyboardVisibilityEvent.setEventListener(this, this)
         login_btn.isEnabled = false
         email_input.addTextChangedListener(this)
         password_input.addTextChangedListener(this)
+        login_btn.setOnClickListener(this)
+        create_account_text.setOnClickListener(this)
         mAuth = FirebaseAuth.getInstance()
     }
 
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, Text
 
     override fun afterTextChanged(s: Editable?) {
         login_btn.isEnabled = validate(email_input.text.toString(), password_input.text.toString())
+        Log.d(TAG, "afterTextChanged: Text Changed!")
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -52,19 +54,26 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, Text
     }
 
     override fun onClick(v: View) {
-        val email = email_input.text.toString()
-        var password = password_input.text.toString()
-        if (validate(email, password)) {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
+        when (v.id) {
+            R.id.login_btn -> {
+                val email = email_input.text.toString()
+                var password = password_input.text.toString()
+                if (validate(email, password)) {
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            startActivity(Intent(this, HomeActivity::class.java))
+                            finish()
+                        } else {
+                            showToast("Authorization error")
+                        }
+                    }
                 } else {
-                    showToast("Authorization error")
+                    showToast("Please enter e-mail and password")
                 }
             }
-        } else {
-            showToast("Please enter e-mail and password")
+            R.id.create_account_text -> {
+                startActivity(Intent(this, RegisterActivity::class.java))
+            }
         }
     }
 
