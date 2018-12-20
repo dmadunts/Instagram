@@ -18,10 +18,13 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.fragment_register_email.*
 import kotlinx.android.synthetic.main.fragment_register_namepass.*
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
-class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFragment.Listener {
+class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFragment.Listener{
     private val TAG = "RegisterActivity"
 
     private var mEmail: String? = null
@@ -43,9 +46,19 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
     override fun onNext(email: String) {
         if (email.isNotEmpty()) {
             mEmail = email
-            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
-                .addToBackStack(null)
-                .commit()
+            mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    if (it.result!!.signInMethods!!.isEmpty()) {
+                        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    } else {
+                        showToast("This e-mail is already in use")
+                    }
+                } else {
+                    showToast(it.exception!!.message!!)
+                }
+            }
         } else {
             showToast("Please enter E-mail")
         }
