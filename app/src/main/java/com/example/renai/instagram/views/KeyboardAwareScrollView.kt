@@ -1,6 +1,7 @@
 package com.example.renai.instagram.views
 
 import android.app.Activity
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
@@ -10,6 +11,14 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 
 class KeyboardAwareScrollView(context: Context, attrs: AttributeSet) : ScrollView(context, attrs),
     KeyboardVisibilityEventListener {
+    override fun onVisibilityChanged(isOpen: Boolean) {
+        if (isOpen) {
+            scrollTo(0, bottom)
+        } else {
+            scrollTo(0, top)
+        }
+    }
+
     init {
         isFillViewport = true
         isVerticalScrollBarEnabled = false
@@ -17,14 +26,8 @@ class KeyboardAwareScrollView(context: Context, attrs: AttributeSet) : ScrollVie
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        KeyboardVisibilityEvent.setEventListener(context as Activity, this)
-    }
+//        KeyboardVisibilityEvent.setEventListener(context as Activity, this)
+        KeyboardVisibilityEvent.setEventListener(context as Activity?, this)
 
-    override fun onVisibilityChanged(isKeyboardOpen: Boolean) {
-        if (isKeyboardOpen) {
-            scrollTo(0, bottom)
-        } else {
-            scrollTo(0, top)
-        }
     }
 }

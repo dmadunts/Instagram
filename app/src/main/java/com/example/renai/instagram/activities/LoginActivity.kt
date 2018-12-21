@@ -13,15 +13,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
-class LoginActivity : AppCompatActivity(),KeyboardVisibilityEventListener, TextWatcher, View.OnClickListener {
-    override fun onVisibilityChanged(isOpen: Boolean) {
-        if (isOpen) {
-            create_account_text.visibility = View.VISIBLE
-        } else {
-            create_account_text.visibility = View.GONE
-        }
-    }
-
+class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View.OnClickListener {
     private val TAG = "LoginActivity"
     private lateinit var mAuth: FirebaseAuth
 
@@ -30,23 +22,19 @@ class LoginActivity : AppCompatActivity(),KeyboardVisibilityEventListener, TextW
         setContentView(R.layout.activity_login)
         Log.d(TAG, "onCreate")
 
-        login_btn.isEnabled = false
-        email_input.addTextChangedListener(this)
-        password_input.addTextChangedListener(this)
+        //Listener for keyboard open/close state.
+        //Used in conjunction with scrollview in case of user focused TextEdits
+        // to resize window and let Buttons stay reachable
+        KeyboardVisibilityEvent.setEventListener(this,this)
+
+        //Method-StateChanger for buttons
+        coordinateBtnAndInputs(login_btn, email_input, password_input)
+
         login_btn.setOnClickListener(this)
         create_account_text.setOnClickListener(this)
+
+        //Instance for FirebaseAuth
         mAuth = FirebaseAuth.getInstance()
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-        login_btn.isEnabled = validate(email_input.text.toString(), password_input.text.toString())
-        Log.d(TAG, "afterTextChanged: Text Changed!")
-    }
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    }
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     }
 
     override fun onClick(v: View) {
@@ -70,6 +58,17 @@ class LoginActivity : AppCompatActivity(),KeyboardVisibilityEventListener, TextW
             R.id.create_account_text -> {
                 startActivity(Intent(this, RegisterActivity::class.java))
             }
+        }
+    }
+
+    //When keyboard is visible, this one resizes window to let buttons stay visible
+    override fun onVisibilityChanged(isOpen: Boolean) {
+        if (isOpen) {
+            create_account_text.visibility = View.GONE
+            login_scrollView.scrollTo(0, login_scrollView.bottom)
+        } else {
+            create_account_text.visibility = View.VISIBLE
+            login_scrollView.scrollTo(0, login_scrollView.top)
         }
     }
 
