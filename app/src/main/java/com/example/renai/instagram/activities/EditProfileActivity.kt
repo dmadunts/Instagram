@@ -8,13 +8,20 @@ import android.widget.Spinner
 import android.widget.TextView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.views.PasswordDialog
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
-class EditProfileActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
     private val TAG = "EditProfileActivity"
     private lateinit var mUser: User
+    private lateinit var mPendingUser: User
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mDatabase: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
@@ -30,9 +37,10 @@ class EditProfileActivity : AppCompatActivity() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
 
-                val auth = FirebaseAuth.getInstance()
-                val database = FirebaseDatabase.getInstance().reference
-                database.child("users").child(auth.currentUser!!.uid)
+                mAuth = FirebaseAuth.getInstance()
+                mDatabase = FirebaseDatabase.getInstance().reference
+
+                mDatabase.child("users").child(mAuth.currentUser!!.uid)
                     .addListenerForSingleValueEvent(ValueEventListenerAdapter {
                         mUser = it.getValue(User::class.java)!!
                         name_input.setText(mUser.name, TextView.BufferType.EDITABLE)
@@ -48,7 +56,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun updateProfile() {
         //get user from inputs
         //validate
-        val user = User(
+        mPendingUser = User(
             name = name_input.text.toString(),
             username = username_input.text.toString(),
             bio = bio_input.text.toString(),
@@ -56,11 +64,55 @@ class EditProfileActivity : AppCompatActivity() {
             phone = phone_input.text.toString().toLong(),
             email = email_input.text.toString()
         )
-        val error = validate(user)
+        val error = validate(mPendingUser)
         if (error == null) {
-            //save user
+            if (mPendingUser.email == mUser.email) {
+                updateUser(mPendingUser)
+            } else {
+                PasswordDialog().show(supportFragmentManager, "Password_dialog")
+                //update email in auth
+            }
         } else {
             showToast(error)
+        }
+    }
+
+    private fun updateUser(user: User) {
+        val updatesMap = mutableMapOf<String, Any>()
+        if (user.name != mUser.name) updatesMap["name"] = user.name
+        if (user.username != mUser.username) updatesMap["username"] = user.username
+        if (user.bio != mUser.bio) updatesMap["bio"] = user.bio
+        if (user.phone != mUser.phone) updatesMap["phone"] = user.phone
+        if (user.email != mUser.email) updatesMap["email"] = user.email
+        if (user.website != mUser.website) updatesMap["website"] = user.website
+
+        mDatabase.child("users").child(mAuth.currentUser!!.uid).updateChildren(updatesMap)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    showToast("Profile saved.")
+                    finish()
+                } else {
+                    showToast(it.exception!!.message!!)
+                }
+            }
+    }
+
+    override fun onPasswordConfirm(password: String) {
+        val credential = EmailAuthProvider.getCredential(mUser.email, password)
+        mAuth.currentUser!!.reauthenticate(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                //update email in auth
+                //update user
+                mAuth.currentUser!!.updateEmail(mPendingUser.email).addOnCompleteListener{
+                    if (it.isSuccessful) {
+                        updateUser(mPendingUser)
+                    } else {
+                        showToast(it.exception!!.message!!)
+                    }
+                }
+            } else {
+                showToast(it.exception!!.message!!)
+            }
         }
     }
 

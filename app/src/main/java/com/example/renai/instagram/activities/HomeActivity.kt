@@ -4,12 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.example.renai.instagram.R
+import com.example.renai.instagram.models.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity(0) {
     private val TAG = "HomeActivity"
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var mUser: User
+    private lateinit var mDatabase: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -17,6 +22,13 @@ class HomeActivity : BaseActivity(0) {
         setupBottomNavigation()
 
         mAuth = FirebaseAuth.getInstance()
+        mDatabase = FirebaseDatabase.getInstance().reference
+
+        mDatabase.child("users").child(mAuth.currentUser!!.uid)
+            .addListenerForSingleValueEvent(ValueEventListenerAdapter {
+                mUser = it.getValue(User::class.java)!!
+                user_email_label.text = mUser.email
+            })
 
         sign_out_text.setOnClickListener {
             mAuth.signOut()

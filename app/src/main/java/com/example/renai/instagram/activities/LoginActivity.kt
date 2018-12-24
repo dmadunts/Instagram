@@ -41,14 +41,14 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
         when (v.id) {
             R.id.login_btn -> {
                 val email = email_input.text.toString()
-                var password = password_input.text.toString()
+                val password = password_input.text.toString()
                 if (validate(email, password)) {
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                         if (it.isSuccessful) {
                             startActivity(Intent(this, HomeActivity::class.java))
                             finish()
                         } else {
-                            showToast("Authorization error")
+                            showToast(it.exception!!.message!!)
                         }
                     }
                 } else {
