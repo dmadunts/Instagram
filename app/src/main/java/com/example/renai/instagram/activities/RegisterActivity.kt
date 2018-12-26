@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -41,7 +42,7 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
     override fun onNext(email: String) {
         if (email.isNotEmpty()) {
             mEmail = email
-            mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener{
+            mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener {
                 if (it.isSuccessful) {
                     if (it.result?.signInMethods?.isEmpty() != false) {
                         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
@@ -59,26 +60,32 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
         }
     }
 
+    private fun FirebaseAuth.fetchSignInMethodsForEmail(email: String, onSuccess: () -> Unit) {
+        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener {
+            if (it.isSuccessful) {
+                if (it.result?.signInMethods?.isEmpty() != false) {
+                    supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    showToast("This email already exists")
+                }
+            } else {
+                showToast(it.exception!!.message!!)
+            }
+        }
+    }
+
     override fun onRegister(fullName: String, password: String) {
         if (fullName.isNotEmpty() && password.isNotEmpty()) {
             val email = mEmail
             if (email != null) {
-                mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener{
-                        if (it.isSuccessful) {
-                            val user = mkUser(fullName, email)
-                            val reference = mDatabase.child("users").child(it.result!!.user!!.uid)
-                            reference.setValue(user).addOnCompleteListener{
-                                if (it.isSuccessful) {
-                                    startHomeActivity()
-                                } else {
-                                    unknownRegisterError(it)
-                                }
-                            }
-                        } else {
-                            unknownRegisterError(it)
-                        }
+                mAuth.createUserWithEmailAndPassword(email, password) {
+                    val user = mkUser(fullName, email)
+                    mDatabase.createUser(it.user!!.uid, user) {
+                        startHomeActivity()
                     }
+                }
             } else {
                 Log.e(TAG, "onRegister: email is null")
                 showToast("Please enter email")
@@ -88,6 +95,7 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
             showToast("Please enter full name and password")
         }
     }
+
 
     private fun unknownRegisterError(it: Task<*>) {
         Log.e(TAG, "failed to create user profile", it.exception)
@@ -106,6 +114,32 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
 
     private fun mkUsername(fullName: String) =
         fullName.toLowerCase().replace(" ", ".")
+
+    private fun DatabaseReference.createUser(uid: String, user: User, onSuccess: () -> Unit) {
+        val reference = child("users").child(uid)
+        reference.setValue(user).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onSuccess()
+            } else {
+                unknownRegisterError(it)
+            }
+        }
+    }
+
+    private fun FirebaseAuth.createUserWithEmailAndPassword(
+        email: String,
+        password: String,
+        onSuccess: (AuthResult) -> Unit
+    ) {
+        createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    onSuccess(it.result!!)
+                } else {
+                    showToast(it.exception!!.message!!)
+                }
+            }
+    }
 }
 
 
@@ -117,15 +151,17 @@ class EmailFragment : Fragment() {
         fun onNext(email: String)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_register_email, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         coordinateBtnAndInputs(next_btn, email_input)
 
-        next_btn.setOnClickListener{
+        next_btn.setOnClickListener {
             val email = email_input.text.toString()
             mListener.onNext(email)
         }
@@ -145,14 +181,16 @@ class NamePassFragment : Fragment() {
         fun onRegister(fullName: String, password: String)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_register_namepass, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         coordinateBtnAndInputs(register_btn, register_name_input, register_password_input)
-        register_btn.setOnClickListener{
+        register_btn.setOnClickListener {
             val fullName = register_name_input.text.toString()
             val password = register_password_input.text.toString()
             mListener.onRegister(fullName, password)
