@@ -24,11 +24,7 @@ class HomeActivity : BaseActivity(0) {
         mAuth = FirebaseAuth.getInstance()
         mDatabase = FirebaseDatabase.getInstance().reference
 
-        mDatabase.child("users").child(mAuth.currentUser!!.uid)
-            .addListenerForSingleValueEvent(ValueEventListenerAdapter {
-                mUser = it.getValue(User::class.java)!!
-                user_email_label.text = mUser.email
-            })
+
 
         sign_out_text.setOnClickListener {
             mAuth.signOut()
@@ -38,6 +34,12 @@ class HomeActivity : BaseActivity(0) {
             if (it.currentUser == null) {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
+            } else {
+                mDatabase.child("users").child(mAuth.currentUser!!.uid)
+                    .addListenerForSingleValueEvent(ValueEventListenerAdapter {
+                        mUser = it.getValue(User::class.java)!!
+                        user_email_label.text = mUser.email
+                    })
             }
         }
     }

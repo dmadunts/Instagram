@@ -42,37 +42,17 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
     override fun onNext(email: String) {
         if (email.isNotEmpty()) {
             mEmail = email
-            mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    if (it.result?.signInMethods?.isEmpty() != false) {
-                        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
-                            .addToBackStack(null)
-                            .commit()
-                    } else {
-                        showToast("This email already exists")
-                    }
-                } else {
-                    showToast(it.exception!!.message!!)
-                }
-            }
-        } else {
-            showToast("Please enter email")
-        }
-    }
-
-    private fun FirebaseAuth.fetchSignInMethodsForEmail(email: String, onSuccess: () -> Unit) {
-        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener {
-            if (it.isSuccessful) {
-                if (it.result?.signInMethods?.isEmpty() != false) {
+            mAuth.fetchSignInMethodsForEmail(email) { signInMethods ->
+                if (signInMethods.isEmpty()) {
                     supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
                         .addToBackStack(null)
                         .commit()
                 } else {
                     showToast("This email already exists")
                 }
-            } else {
-                showToast(it.exception!!.message!!)
             }
+        } else {
+            showToast("Please enter email")
         }
     }
 
@@ -81,8 +61,7 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
             val email = mEmail
             if (email != null) {
                 mAuth.createUserWithEmailAndPassword(email, password) {
-                    val user = mkUser(fullName, email)
-                    mDatabase.createUser(it.user!!.uid, user) {
+                    mDatabase.createUser(it.user.uid, mkUser(fullName, email)) {
                         startHomeActivity()
                     }
                 }
@@ -96,11 +75,11 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
         }
     }
 
-
     private fun unknownRegisterError(it: Task<*>) {
         Log.e(TAG, "failed to create user profile", it.exception)
         showToast("Something wrong happened. Please try again later")
     }
+
 
     private fun startHomeActivity() {
         startActivity(Intent(this, HomeActivity::class.java))
@@ -139,6 +118,16 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
                     showToast(it.exception!!.message!!)
                 }
             }
+    }
+
+    private fun FirebaseAuth.fetchSignInMethodsForEmail(email: String, onSuccess: (List<String>) -> Unit) {
+        fetchSignInMethodsForEmail(email).addOnCompleteListener {
+            if (it.isSuccessful) {
+                onSuccess(it.result?.signInMethods ?: emptyList<String>())
+            } else {
+                showToast(it.exception!!.message!!)
+            }
+        }
     }
 }
 

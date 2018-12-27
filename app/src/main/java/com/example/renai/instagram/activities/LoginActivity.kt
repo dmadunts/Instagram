@@ -65,10 +65,10 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
     override fun onVisibilityChanged(isOpen: Boolean) {
         if (isOpen) {
             create_account_text.visibility = View.GONE
-            login_scrollView.scrollTo(0, login_scrollView.bottom)
-        } else {
-            create_account_text.visibility = View.VISIBLE
             login_scrollView.scrollTo(0, login_scrollView.top)
+        } else {
+            login_scrollView.scrollTo(0, login_scrollView.bottom)
+            create_account_text.visibility = View.VISIBLE
         }
     }
 
