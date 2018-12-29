@@ -36,8 +36,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
     private lateinit var mDatabase: DatabaseReference
     private lateinit var mStorage: StorageReference
     private lateinit var mImageUri: Uri
-
-    lateinit var mCurrentPhotoPath: String
+    private lateinit var mUid: String
 
     private val simpleDateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
     private val REQUEST_IMAGE_CAPTURE: Int = 1
@@ -72,48 +71,38 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
                         phone_input.setText(mUser.phone.toString(), TextView.BufferType.EDITABLE)
                         email_input.setText(mUser.email, TextView.BufferType.EDITABLE)
                     })
+                mUid = mAuth.currentUser!!.uid
             }
     }
 
-
     private fun takeCameraPicture() {
-//        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-//            takePictureIntent.resolveActivity(packageManager).also{
-//                val imageFile = createImageFile()
-//                mImageUri = FileProvider.getUriForFile(
-//                    this,
-//                    "com.example.renai.instagram.fileprovider",
-//                    imageFile
-//                )
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri)
-//                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-//            }
-//        }
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (intent.resolveActivity(packageManager) != null) {
             val imageFile = createImageFile()
-            mIm
+            mImageUri = FileProvider.getUriForFile(this, "com.example.renai.instagram.fileprovider", imageFile)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri)
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
         }
     }
+
 
     private fun createImageFile(): File {
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile("JPEG_${simpleDateFormat.format(Date())}_", ".jpg", storageDir)
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val uid = mAuth.currentUser!!.uid
-
-            //upload image to FirebaseStorage
-            mStorage.child("users/$uid/photo").putFile(mImageUri).addOnCompleteListener{
+            mStorage.child("users/$mUid/photo").putFile(mImageUri).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    mDatabase.child("users/$uid/photo").setValue(it.result.)
+                    val url = mStorage.child("users/$mUid/photo.jpg").downloadUrl.toString()
+                    mDatabase.child("users/$mUid/photo").setValue(url)
+                    Log.d(TAG, "onActivityResult: Link to database $url")
                 } else {
                     showToast(it.exception!!.message!!)
                 }
             }
-            //save image to database user.photo
         }
     }
 

@@ -6,5 +6,6 @@ data class User(
     val bio: String = "",
     val website: String = "",
     val phone: Long = 0L,
-    val email: String = ""
+    val email: String = "",
+    val photo: String = ""
 )
