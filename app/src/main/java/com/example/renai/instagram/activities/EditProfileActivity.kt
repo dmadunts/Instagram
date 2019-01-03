@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.views.PasswordDialog
@@ -92,19 +93,41 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
     }
 
 
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+//            mStorage.child("users/$mUid/photo").putFile(mImageUri).addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    val url = mStorage.child("users/$mUid/photo.jpg").downloadUrl.toString()
+//                    mDatabase.child("users/$mUid/photo").setValue(url)
+//                    Log.d(TAG, "onActivityResult: Link to database $url")
+//                } else {
+//                    showToast(it.exception!!.message!!)
+//                }
+//            }
+//        }
+//    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             mStorage.child("users/$mUid/photo").putFile(mImageUri).addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val url = mStorage.child("users/$mUid/photo.jpg").downloadUrl.toString()
-                    mDatabase.child("users/$mUid/photo").setValue(url)
-                    Log.d(TAG, "onActivityResult: Link to database $url")
+                    Log.d(TAG, "onActivityResult: File stored")
+                    mStorage.child("users/$mUid/photo").downloadUrl.addOnSuccessListener {
+                        val url = it.toString()
+                        mDatabase.child("users/$mUid/photo").setValue(url)
+                        Log.d(TAG, "onActivityResult: Link to database $url")
+                    }.addOnFailureListener{
+                        Log.d(TAG, "onActivityResult: Can't get a downloadUri")
+                        showToast(it.message!!)
+                    }
                 } else {
+                    Log.d(TAG, "onActivityResult: File not stored")
                     showToast(it.exception!!.message!!)
                 }
             }
         }
     }
+
 
     private fun updateProfile() {
         mPendingUser = readInputs()
