@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -21,6 +23,12 @@ class ValueEventListenerAdapter(val handler: (DataSnapshot) -> Unit) : ValueEven
         Log.e(TAG, "onCancelled: ", error.toException())
     }
 }
+
+@GlideModule
+class CustomGlideModule : AppGlideModule() {
+
+}
+
 
 fun Context.showToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, text, duration).show()

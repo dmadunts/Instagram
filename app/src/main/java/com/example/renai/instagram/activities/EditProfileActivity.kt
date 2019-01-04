@@ -12,7 +12,6 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.views.PasswordDialog
@@ -71,6 +70,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
                         website_input.setText(mUser.website, TextView.BufferType.EDITABLE)
                         phone_input.setText(mUser.phone.toString(), TextView.BufferType.EDITABLE)
                         email_input.setText(mUser.email, TextView.BufferType.EDITABLE)
+                        GlideApp.with(this).load(mUser.photo).into(profile_image)
                     })
                 mUid = mAuth.currentUser!!.uid
             }
@@ -92,32 +92,16 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         return File.createTempFile("JPEG_${simpleDateFormat.format(Date())}_", ".jpg", storageDir)
     }
 
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-//            mStorage.child("users/$mUid/photo").putFile(mImageUri).addOnCompleteListener {
-//                if (it.isSuccessful) {
-//                    val url = mStorage.child("users/$mUid/photo.jpg").downloadUrl.toString()
-//                    mDatabase.child("users/$mUid/photo").setValue(url)
-//                    Log.d(TAG, "onActivityResult: Link to database $url")
-//                } else {
-//                    showToast(it.exception!!.message!!)
-//                }
-//            }
-//        }
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             mStorage.child("users/$mUid/photo").putFile(mImageUri).addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d(TAG, "onActivityResult: File stored")
                     mStorage.child("users/$mUid/photo").downloadUrl.addOnSuccessListener {
-                        val url = it.toString()
-                        mDatabase.child("users/$mUid/photo").setValue(url)
-                        Log.d(TAG, "onActivityResult: Link to database $url")
-                    }.addOnFailureListener{
-                        Log.d(TAG, "onActivityResult: Can't get a downloadUri")
+                        val photoUrl = it.toString()
+                        mDatabase.child("users/$mUid/photo").setValue(photoUrl)
+                        mUser = mUser.copy(photo = photoUrl)
+                    }.addOnFailureListener {
                         showToast(it.message!!)
                     }
                 } else {
