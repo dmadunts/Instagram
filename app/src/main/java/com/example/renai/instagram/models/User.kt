@@ -3,9 +3,9 @@ package com.example.renai.instagram.models
 data class User(
     val name: String = "",
     val username: String = "",
-    val bio: String = "",
-    val website: String = "",
-    val phone: Long = 0L,
     val email: String = "",
-    val photo: String = ""
+    val bio: String? = null,
+    val website: String? = null,
+    val phone: Long? = null,
+    val photo: String? = null
 )

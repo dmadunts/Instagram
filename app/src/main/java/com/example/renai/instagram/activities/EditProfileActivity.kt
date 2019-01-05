@@ -68,9 +68,9 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
                         username_input.setText(mUser.username, TextView.BufferType.EDITABLE)
                         bio_input.setText(mUser.bio, TextView.BufferType.EDITABLE)
                         website_input.setText(mUser.website, TextView.BufferType.EDITABLE)
-                        phone_input.setText(mUser.phone.toString(), TextView.BufferType.EDITABLE)
+                        phone_input.setText(mUser.phone?.toString(), TextView.BufferType.EDITABLE)
                         email_input.setText(mUser.email, TextView.BufferType.EDITABLE)
-                        GlideApp.with(this).load(mUser.photo).into(profile_image)
+                        profile_image.loadUserPhoto(mUser.photo)
                     })
                 mUid = mAuth.currentUser!!.uid
             }
@@ -92,6 +92,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         return File.createTempFile("JPEG_${simpleDateFormat.format(Date())}_", ".jpg", storageDir)
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             mStorage.child("users/$mUid/photo").putFile(mImageUri).addOnCompleteListener {
@@ -101,6 +102,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
                         val photoUrl = it.toString()
                         mDatabase.child("users/$mUid/photo").setValue(photoUrl)
                         mUser = mUser.copy(photo = photoUrl)
+                        profile_image.loadUserPhoto(mUser.photo)
                     }.addOnFailureListener {
                         showToast(it.message!!)
                     }
@@ -128,19 +130,18 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
     }
 
     private fun readInputs(): User {
-        val phoneStr = phone_input.text.toString()
         return User(
             name = name_input.text.toString(),
             username = username_input.text.toString(),
-            bio = bio_input.text.toString(),
-            website = website_input.text.toString(),
-            phone = if (phoneStr.isEmpty()) 0 else phoneStr.toLong(),
-            email = email_input.text.toString()
+            email = email_input.text.toString(),
+            bio = bio_input.text.toStringOrNull(),
+            website = website_input.text.toStringOrNull(),
+            phone = phone_input.text.toString().toLongOrNull()
         )
     }
 
     private fun updateUser(user: User) {
-        val updatesMap = mutableMapOf<String, Any>()
+        val updatesMap = mutableMapOf<String, Any?>()
         if (user.name != mUser.name) updatesMap["name"] = user.name
         if (user.username != mUser.username) updatesMap["username"] = user.username
         if (user.bio != mUser.bio) updatesMap["bio"] = user.bio
@@ -195,8 +196,8 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         }
     }
 
-    private fun DatabaseReference.updateUser(uid: String, updatesMap: Map<String, Any>, onSuccess: () -> Unit) {
-        child("users").child(mAuth.currentUser!!.uid).updateChildren(updatesMap)
+    private fun DatabaseReference.updateUser(uid: String, updatesMap: Map<String, Any?>, onSuccess: () -> Unit) {
+        child("users").child(uid).updateChildren(updatesMap)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     onSuccess()
