@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : BaseActivity(4) {
     private val TAG = "ProfileActivity"
-    private lateinit var mFirebaseHelper: FirebaseHelper
+    private lateinit var mFirebase: FirebaseHelper
     private lateinit var mUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +23,8 @@ class ProfileActivity : BaseActivity(4) {
             startActivity(intent)
         }
 
-        mFirebaseHelper = FirebaseHelper(this)
-        mFirebaseHelper.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
+        mFirebase = FirebaseHelper(this)
+        mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
             mUser = it.getValue(User::class.java)!!
             username_text.text = mUser.username
             profile_picture.loadUserPhoto(mUser.photo)

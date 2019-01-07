@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.example.renai.instagram.R
 import kotlinx.android.synthetic.main.bottom_navigation_view.*
+import kotlinx.android.synthetic.main.bottom_navigation_view.view.*
 
 abstract class BaseActivity(val navNumber: Int) : AppCompatActivity() {
     private val TAG = "BaseActivity"
@@ -34,12 +35,18 @@ abstract class BaseActivity(val navNumber: Int) : AppCompatActivity() {
                 val intent = Intent(this, nextActivity)
                 intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
                 startActivity(intent)
-                overridePendingTransition(0,0)
+                overridePendingTransition(0, 0)
                 true
             } else {
                 false
             }
         }
-        bottom_navigation_view.menu.getItem(navNumber).isChecked = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (bottom_navigation_view != null) {
+            bottom_navigation_view.menu.getItem(navNumber).isChecked = true
+        }
     }
 }
