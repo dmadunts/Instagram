@@ -2,54 +2,19 @@ package com.example.renai.instagram.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.TextView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.utils.CameraPictureTaker
+import com.example.renai.instagram.utils.FirebaseHelper
+import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import com.example.renai.instagram.views.PasswordDialog
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_edit_profile.*
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
-
-class CameraPictureTaker(private val activity: Activity) {
-    var imageUri: Uri? = null
-    val REQUEST_CODE: Int = 1
-    private val simpleDateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
-
-
-    fun takeCameraPicture() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(activity.packageManager) != null) {
-            val imageFile = createImageFile()
-            imageUri = FileProvider.getUriForFile(activity, "com.example.renai.instagram.fileprovider", imageFile)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-            activity.startActivityForResult(intent, REQUEST_CODE)
-        }
-    }
-
-
-    private fun createImageFile(): File {
-        val storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("JPEG_${simpleDateFormat.format(Date())}_", ".jpg", storageDir)
-    }
-}
 
 class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
     private val TAG = "EditProfileActivity"
@@ -78,15 +43,15 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
                 spinner.adapter = adapter
 
 
-                mDatabase.child("users").child(mAuth.currentUser!!.uid)
+                mFirebaseHelper.currentUserReference()
                     .addListenerForSingleValueEvent(ValueEventListenerAdapter {
                         mUser = it.getValue(User::class.java)!!
-                        name_input.setText(mUser.name, TextView.BufferType.EDITABLE)
-                        username_input.setText(mUser.username, TextView.BufferType.EDITABLE)
-                        bio_input.setText(mUser.bio, TextView.BufferType.EDITABLE)
-                        website_input.setText(mUser.website, TextView.BufferType.EDITABLE)
-                        phone_input.setText(mUser.phone?.toString(), TextView.BufferType.EDITABLE)
-                        email_input.setText(mUser.email, TextView.BufferType.EDITABLE)
+                        name_input.setText(mUser.name)
+                        username_input.setText(mUser.username)
+                        bio_input.setText(mUser.bio)
+                        website_input.setText(mUser.website)
+                        phone_input.setText(mUser.phone?.toString())
+                        email_input.setText(mUser.email)
                         profile_image.loadUserPhoto(mUser.photo)
                     })
             }
@@ -95,21 +60,14 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == cameraPictureTaker.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val uid = mAuth.currentUser!!.uid
             mFirebaseHelper.uploadUserPhoto(cameraPictureTaker.imageUri!!) {
-                mStorage.child("users/$uid/photo").downloadUrl.addOnSuccessListener {
-                    val photoUrl = it.toString()
-                    mFirebaseHelper.updateUserPhoto(photoUrl) {
-                        mUser = mUser.copy(photo = photoUrl)
-                        profile_image.loadUserPhoto(mUser.photo)
-                    }
-                }.addOnFailureListener {
-                    showToast(it.message!!)
+                mFirebaseHelper.updateUserPhoto { photoUrl ->
+                    mUser = mUser.copy(photo = photoUrl)
+                    profile_image.loadUserPhoto(mUser.photo)
                 }
             }
         }
     }
-
 
     private fun updateProfile() {
         mPendingUser = readInputs()
@@ -163,75 +121,16 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
             showToast("You should enter your password.")
         }
     }
-
-    private fun validate(user: User): String? =
-        when {
-            user.name.isEmpty() -> "Please enter your Name"
-            user.username.isEmpty() -> "Please enter your Username"
-            user.email.isEmpty() -> "Please enter your E-mail"
-            else -> null
-        }
-
-
 }
 
-class FirebaseHelper(private val activity: Activity) {
-    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val mDatabase: DatabaseReference = FirebaseDatabase.getInstance().reference
-    private val mStorage: StorageReference = FirebaseStorage.getInstance().reference
 
-    fun updateEmail(email: String, onSuccess: () -> Unit) {
-        mAuth.currentUser!!.updateEmail(email).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess()
-            } else {
-                activity.showToast(it.exception!!.message!!)
-            }
-        }
+private fun validate(user: User): String? =
+    when {
+        user.name.isEmpty() -> "Please enter your Name"
+        user.username.isEmpty() -> "Please enter your Username"
+        user.email.isEmpty() -> "Please enter your E-mail"
+        else -> null
     }
 
-    fun reauthenticate(credential: AuthCredential, onSuccess: () -> Unit) {
-        mAuth.currentUser!!.reauthenticate(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess()
-            } else {
-                activity.showToast(it.exception!!.message!!)
-            }
-        }
-    }
 
-    fun updateUser(updatesMap: Map<String, Any?>, onSuccess: () -> Unit) {
-        mDatabase.child("users").child(mAuth.currentUser!!.uid).updateChildren(updatesMap)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    onSuccess()
-                } else {
-                    activity.showToast(it.exception!!.message!!)
-                }
-            }
-    }
-
-    fun uploadUserPhoto(
-        photo: Uri,
-        onSuccess: (UploadTask.TaskSnapshot) -> Unit
-    ) {
-        mStorage.child("users/${mAuth.currentUser!!.uid}/photo").putFile(photo).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess(it.result!!)
-            } else {
-                activity.showToast(it.exception!!.message!!)
-            }
-        }
-    }
-
-    fun updateUserPhoto(photoUrl: String, onSuccess: () -> Unit) {
-        mDatabase.child("users/${mAuth.currentUser!!.uid}/photo").setValue(photoUrl).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess()
-            } else {
-                activity.showToast(it.exception!!.message!!)
-            }
-        }
-    }
-}
 

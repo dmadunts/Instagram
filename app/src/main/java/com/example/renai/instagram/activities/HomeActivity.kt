@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
