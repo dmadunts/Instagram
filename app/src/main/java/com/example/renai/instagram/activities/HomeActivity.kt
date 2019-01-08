@@ -18,10 +18,6 @@ class HomeActivity : BaseActivity(0) {
         setupBottomNavigation()
         mFirebase = FirebaseHelper(this)
 
-        sign_out_text.setOnClickListener {
-            mFirebase.auth.signOut()
-        }
-
         mFirebase.auth.addAuthStateListener {
             if (it.currentUser == null) {
                 startActivity(Intent(this, LoginActivity::class.java))
@@ -29,17 +25,21 @@ class HomeActivity : BaseActivity(0) {
             }
         }
 
-        mFirebase.database.child("feed-posts").child(mFirebase.uid).addValueEventListener(ValueEventListenerAdapter {
-            val posts = it.children.map { it.getValue(FeedPost::class.java)!! }
-            Log.d(TAG, "feedPosts: ${posts.first().timestampDate()}")
-        })
+
     }
 
     override fun onStart() {
         super.onStart()
-        if (mFirebase.auth.currentUser == null) {
+        val currentUser  = mFirebase.auth.currentUser
+        if (currentUser == null) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
+        } else {
+            mFirebase.database.child("feed-posts").child(currentUser.uid)
+                .addValueEventListener(ValueEventListenerAdapter {
+                    val posts = it.children.map { it.getValue(FeedPost::class.java)!! }
+                    Log.d(TAG, "feedPosts: ${posts.first().timestampDate()}")
+                })
         }
     }
 }
