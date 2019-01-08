@@ -12,7 +12,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 
 class FirebaseHelper(private val activity: Activity) {
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    var auth: FirebaseAuth = FirebaseAuth.getInstance()
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
     var storage: StorageReference = FirebaseStorage.getInstance().reference
     var uid: String = auth.currentUser!!.uid
