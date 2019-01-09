@@ -12,7 +12,7 @@
                 android:layout_height="wrap_content">
             <ImageView
                     android:id="@+id/back_image"
-                    style="@style/toolbar_ic"
+                    style="@style/icon"
                     android:src="@drawable/ic_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
