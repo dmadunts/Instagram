@@ -76,7 +76,7 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
     }
 
     private fun unknownRegisterError(it: Task<*>) {
-        Log.e(TAG, "failed to create user profile", it.exception)
+        Log.e(TAG, "failed to create currentUser profile", it.exception)
         showToast("Something wrong happened. Please try again later")
     }
 

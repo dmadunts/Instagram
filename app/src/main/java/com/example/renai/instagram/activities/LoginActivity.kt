@@ -3,8 +3,6 @@ package com.example.renai.instagram.activities
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import com.example.renai.instagram.R
@@ -23,7 +21,7 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
         Log.d(TAG, "onCreate")
 
         //Listener for keyboard open/close state.
-        //Used in conjunction with scrollview in case of user focused TextEdits
+        //Used in conjunction with scrollview in case of currentUser focused TextEdits
         // to resize window and let Buttons stay reachable
         KeyboardVisibilityEvent.setEventListener(this,this)
 

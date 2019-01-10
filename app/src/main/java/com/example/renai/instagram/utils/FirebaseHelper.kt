@@ -15,7 +15,6 @@ class FirebaseHelper(private val activity: Activity) {
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
     var storage: StorageReference = FirebaseStorage.getInstance().reference
-    var uid: String = auth.currentUser!!.uid
 
     fun updateEmail(email: String, onSuccess: () -> Unit) {
         auth.currentUser!!.updateEmail(email).addOnCompleteListener {
@@ -38,7 +37,7 @@ class FirebaseHelper(private val activity: Activity) {
     }
 
     fun updateUser(updatesMap: Map<String, Any?>, onSuccess: () -> Unit) {
-        database.child("users").child(uid).updateChildren(updatesMap)
+        database.child("users").child(auth.currentUser!!.uid).updateChildren(updatesMap)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     onSuccess()
@@ -52,7 +51,7 @@ class FirebaseHelper(private val activity: Activity) {
         photo: Uri,
         onSuccess: (UploadTask.TaskSnapshot) -> Unit
     ) {
-        storage.child("users/$uid/photo").putFile(photo).addOnCompleteListener {
+        storage.child("users/${auth.currentUser!!.uid}/photo").putFile(photo).addOnCompleteListener {
             if (it.isSuccessful) {
                 onSuccess(it.result!!)
             } else {
@@ -62,9 +61,9 @@ class FirebaseHelper(private val activity: Activity) {
     }
 
     fun updateUserPhoto(onSuccess: (String) -> Unit) {
-        storage.child("users/$uid/photo").downloadUrl.addOnSuccessListener { uri ->
+        storage.child("users/${auth.currentUser!!.uid}/photo").downloadUrl.addOnSuccessListener { uri ->
             val photoUrl = uri.toString()
-            database.child("users/$uid/photo").setValue(photoUrl).addOnCompleteListener {
+            database.child("users/${auth.currentUser!!.uid}/photo").setValue(photoUrl).addOnCompleteListener {
                 if (it.isSuccessful) {
                     onSuccess(photoUrl)
                 } else {
@@ -74,6 +73,6 @@ class FirebaseHelper(private val activity: Activity) {
         }
     }
 
-    fun currentUserReference(): DatabaseReference = database.child("users").child(uid)
+    fun currentUserReference(): DatabaseReference = database.child("users").child(auth.currentUser!!.uid)
 
 }
