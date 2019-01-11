@@ -26,7 +26,7 @@
 
         <EditText
                 android:id="@+id/email_input"
-                style="@style/login_input"
+                style="@style/big_input"
                 app:layout_constraintTop_toBottomOf="@id/instagram_image"
                 android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
 
         <EditText
                 android:id="@+id/password_input"
-                style="@style/login_input"
+                style="@style/big_input"
                 app:layout_constraintTop_toBottomOf="@id/email_input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
 
         <Button
                 android:id="@+id/login_btn"
-                style="@style/login_button"
+                style="@style/blue_btn"
                 app:layout_constraintTop_toBottomOf="@id/password_input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

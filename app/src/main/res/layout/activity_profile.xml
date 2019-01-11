@@ -11,6 +11,7 @@
     <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/toolbar">
+
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -24,6 +25,16 @@
                     app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
+                    android:id="@+id/add_friends_image"
+                    style="@style/icon"
+                    android:src="@drawable/ic_add_friends"
+                    app:layout_constraintEnd_toStartOf="@id/settings_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                    android:id="@+id/settings_image"
                     style="@style/icon"
                     android:src="@drawable/ic_more"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -64,6 +75,7 @@
             app:layout_constraintBaseline_toBaselineOf="@id/posts_text"
             style="@style/profile_text"
             android:id="@+id/followers_text"/>
+
     <TextView
             android:text="Following"
             style="@style/profile_text"
@@ -71,6 +83,7 @@
             app:layout_constraintEnd_toEndOf="@id/edit_profile_btn"
             app:layout_constraintBaseline_toBaselineOf="@id/posts_text"
             android:id="@+id/following_text"/>
+
     <TextView
             android:id="@+id/posts_count_text"
             android:text="50"

@@ -32,7 +32,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         mCamera = CameraHelper(this)
         mFirebase = FirebaseHelper(this)
         save_image.setOnClickListener { updateProfile() }
-        close_image.setOnClickListener { finish() }
+        back_image.setOnClickListener { finish() }
         change_photo_text.setOnClickListener { mCamera.takeCameraPicture() }
 
         //Spinner
@@ -104,7 +104,6 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         if (user.website != mUser.website) updatesMap["website"] = user.website
 
         mFirebase.updateUser(updatesMap) {
-            showToast("Profile saved.")
             finish()
         }
     }

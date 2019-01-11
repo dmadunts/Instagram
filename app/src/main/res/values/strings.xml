@@ -26,6 +26,7 @@
     <string name="please_enter_password">Please enter your password</string>
     <string name="share">Share</string>
     <string name="new_post">New Post</string>
+    <string name="discover_people">Discover People</string>
     <string-array name="genders_array">
         <item>Not Specified</item>
         <item>Male</item>
