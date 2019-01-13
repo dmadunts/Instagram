@@ -115,8 +115,4 @@ class FeedAdapter(private val posts: List<FeedPost>, private val currentUser: Us
         caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
         caption_text.movementMethod = LinkMovementMethod.getInstance()
     }
-
-    private fun ImageView.loadImage(image: String?) {
-        GlideApp.with(this).load(image).into(this)
-    }
 }

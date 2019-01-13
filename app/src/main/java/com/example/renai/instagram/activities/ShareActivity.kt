@@ -49,12 +49,12 @@ class ShareActivity : BaseActivity(2) {
         if (imageUri != null) {
             startActivity(Intent(this, ProfileActivity::class.java))
             finish()
-            mFirebase.storage.child("users").child(mFirebase.auth.currentUser!!.uid).child(imageUri.lastPathSegment)
+            mFirebase.storage.child("users").child(mFirebase.auth.currentUser!!.uid).child(imageUri.lastPathSegment!!)
                 .putFile(imageUri)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         mFirebase.storage.child("users").child(mFirebase.auth.currentUser!!.uid)
-                            .child(imageUri.lastPathSegment)
+                            .child(imageUri.lastPathSegment!!)
                             .downloadUrl.addOnSuccessListener { imageDownloadUrl ->
                             mFirebase.database.child("images").child(mFirebase.auth.currentUser!!.uid)
                                 .push().setValue(imageDownloadUrl.toString()).addOnCompleteListener {

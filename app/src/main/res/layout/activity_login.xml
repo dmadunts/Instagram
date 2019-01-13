@@ -45,7 +45,7 @@
 
         <Button
                 android:id="@+id/login_btn"
-                style="@style/blue_btn"
+                style="@style/big_btn"
                 app:layout_constraintTop_toBottomOf="@id/password_input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

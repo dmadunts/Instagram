@@ -22,7 +22,7 @@
 
     <Button
             android:id="@+id/next_btn"
-            style="@style/blue_btn"
+            style="@style/big_btn"
             android:text="Next"
             app:layout_constraintTop_toBottomOf="@id/email_input"/>
 </android.support.constraint.ConstraintLayout>
