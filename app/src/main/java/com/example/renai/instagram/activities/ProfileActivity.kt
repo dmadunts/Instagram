@@ -12,7 +12,6 @@ import android.widget.ImageView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.FirebaseHelper
-import com.example.renai.instagram.utils.GlideApp
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import kotlinx.android.synthetic.main.activity_profile.*
 
@@ -41,7 +40,7 @@ class ProfileActivity : BaseActivity(4) {
 
         mFirebase = FirebaseHelper(this)
         mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-            mUser = it.getValue(User::class.java)!!
+            mUser = it.asUser()
             username_text.text = mUser.username
             profile_picture.loadUserPhoto(mUser.photo)
         })

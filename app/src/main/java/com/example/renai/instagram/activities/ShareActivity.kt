@@ -28,7 +28,7 @@ class ShareActivity : BaseActivity(2) {
         mCamera = CameraHelper(this)
         mCamera.takeCameraPicture()
         mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-            mUser = it.getValue(User::class.java)!!
+            mUser = it.asUser()
         })
         back_image.setOnClickListener { finish() }
         share_text.setOnClickListener { share() }

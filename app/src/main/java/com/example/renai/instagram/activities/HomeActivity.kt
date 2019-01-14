@@ -15,12 +15,10 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.FirebaseHelper
-import com.example.renai.instagram.utils.GlideApp
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.feed_item.view.*
@@ -43,7 +41,7 @@ class HomeActivity : BaseActivity(0) {
             }
         }
         mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-            mUser = it.getValue(User::class.java)!!
+            mUser = it.asUser()
         })
     }
 
@@ -59,7 +57,7 @@ class HomeActivity : BaseActivity(0) {
                     val posts = it.children.map { it.getValue(FeedPost::class.java)!! }
 
                     mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-                        val currentUser = it.getValue(User::class.java)!!
+                        val currentUser = it.asUser()
                         feed_recycler.adapter = FeedAdapter(posts, currentUser)
                         feed_recycler.layoutManager = LinearLayoutManager(this)
                     })

@@ -10,5 +10,7 @@ data class User(
     val website: String? = null,
     val phone: Long? = null,
     val photo: String? = null,
-    @Exclude val uid: String? = null
+    @Exclude val uid: String = "",
+    val follows: Map<String, Boolean> = emptyMap(),
+    val followers: Map<String, Boolean> = emptyMap()
 )
