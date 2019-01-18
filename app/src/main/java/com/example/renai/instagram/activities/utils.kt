@@ -10,11 +10,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.renai.instagram.R
+import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.GlideApp
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
 
 
 fun Context.showToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
@@ -66,5 +68,7 @@ private fun View.ifNotDestroyed(block: () -> Unit) {
 }
 
 fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)
+fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)?.copy(id = key!!)
+fun DatabaseReference.setValueTrueOrRemove(value: Boolean) = if (value) setValue(true) else removeValue()
 
 

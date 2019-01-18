@@ -17,15 +17,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.renai.instagram.R
+import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.FirebaseHelper
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 
-class HomeActivity : BaseActivity(0) {
+class HomeActivity : BaseActivity(0), FeedAdapter.Listener {
     private val TAG = "HomeActivity"
     private lateinit var mFirebase: FirebaseHelper
+    private lateinit var mAdapter: FeedAdapter
     private lateinit var mUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +47,7 @@ class HomeActivity : BaseActivity(0) {
         })
     }
 
+
     override fun onStart() {
         super.onStart()
         val loginUser = mFirebase.auth.currentUser
@@ -54,21 +57,54 @@ class HomeActivity : BaseActivity(0) {
         } else {
             mFirebase.database.child("feed-posts").child(loginUser.uid)
                 .addValueEventListener(ValueEventListenerAdapter {
-                    val posts = it.children.map { it.getValue(FeedPost::class.java)!! }
+                    val posts = it.children.map { it.asFeedPost()!! }
                         .sortedByDescending { it.timestampDate() }
 
                     mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-                        feed_recycler.adapter = FeedAdapter(posts)
+                        mAdapter = FeedAdapter(this, posts)
+                        feed_recycler.adapter = mAdapter
                         feed_recycler.layoutManager = LinearLayoutManager(this)
                     })
                 })
         }
     }
+
+    override fun toggleLike(postId: String) {
+        val reference = mFirebase.database.child("likes").child(postId).child(mFirebase.currentUid()!!)
+        reference
+            .addListenerForSingleValueEvent(ValueEventListenerAdapter {
+                reference.setValueTrueOrRemove(!it.exists())
+            })
+    }
+
+    override fun loadLikes(postId: String, position: Int) {
+        mFirebase.database.child("likes").child(postId).addListenerForSingleValueEvent(
+            ValueEventListenerAdapter {
+                val userLikes = it.children.map { it.key }.toSet()
+                val postLikes = FeedPostLikes(userLikes.size, userLikes.contains(mFirebase.currentUid()))
+                mAdapter.updatePostLikes(position, postLikes)
+            })
+    }
 }
 
-class FeedAdapter(private val posts: List<FeedPost>) :
+data class FeedPostLikes(val likesCount: Int, val likes: Boolean) {
+
+}
+
+class FeedAdapter(private var listener: Listener, private val posts: List<FeedPost>) :
     RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
+    interface Listener {
+        fun toggleLike(postId: String)
+        fun loadLikes(postId: String, position: Int)
+    }
+
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+
+    private var postLikes: Map<Int, FeedPostLikes> = emptyMap()
+    fun updatePostLikes(position: Int, likes: FeedPostLikes) {
+        postLikes + (position to likes)
+        notifyItemChanged(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
@@ -79,22 +115,25 @@ class FeedAdapter(private val posts: List<FeedPost>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
-        with(holder) {
-            view.user_photo_image.loadUserPhoto(post.photo)
-            view.username_text.text = post.username
-            view.post_image.loadImage(post.image)
-            if (post.likesCount == 0) {
-                view.likes_text.visibility = View.GONE
+        val likes = postLikes[position]
+        with(holder.view) {
+            user_photo_image.loadUserPhoto(post.photo)
+            username_text.text = post.username
+            post_image.loadImage(post.image)
+            if (likes!!.likesCount == 0) {
+                likes_text.visibility = View.GONE
             } else {
-                view.likes_text.visibility = View.VISIBLE
-                view.likes_text.text = "${post.likesCount} likes"
+                likes_text.visibility = View.VISIBLE
+                likes_text.text = "${likes!!.likesCount} likes"
             }
             if (post.caption.isEmpty()) {
-                view.caption_text.visibility = View.GONE
+                caption_text.visibility = View.GONE
             } else {
-                view.caption_text.visibility = View.VISIBLE
-                view.caption_text.setCaptionText(post.username, post.caption)
+                caption_text.visibility = View.VISIBLE
+                caption_text.setCaptionText(post.username, post.caption)
             }
+            like_image.setOnClickListener { listener.toggleLike(post.id) }
+            listener.loadLikes(post.id, position)
         }
     }
 
@@ -113,5 +152,4 @@ class FeedAdapter(private val posts: List<FeedPost>) :
         caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
         caption_text.movementMethod = LinkMovementMethod.getInstance()
     }
-
 }

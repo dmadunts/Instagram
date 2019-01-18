@@ -37,7 +37,7 @@ class FirebaseHelper(private val activity: Activity) {
     }
 
     fun updateUser(updatesMap: Map<String, Any?>, onSuccess: () -> Unit) {
-        database.child("users").child(auth.currentUser!!.uid).updateChildren(updatesMap)
+        database.child("users").child(currentUid()!!).updateChildren(updatesMap)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     onSuccess()
@@ -51,7 +51,7 @@ class FirebaseHelper(private val activity: Activity) {
         photo: Uri,
         onSuccess: (UploadTask.TaskSnapshot) -> Unit
     ) {
-        storage.child("users/${auth.currentUser!!.uid}/photo").putFile(photo).addOnCompleteListener {
+        storage.child("users/${currentUid()!!}/photo").putFile(photo).addOnCompleteListener {
             if (it.isSuccessful) {
                 onSuccess(it.result!!)
             } else {
@@ -61,9 +61,9 @@ class FirebaseHelper(private val activity: Activity) {
     }
 
     fun updateUserPhoto(onSuccess: (String) -> Unit) {
-        storage.child("users/${auth.currentUser!!.uid}/photo").downloadUrl.addOnSuccessListener { uri ->
+        storage.child("users/${currentUid()!!}/photo").downloadUrl.addOnSuccessListener { uri ->
             val photoUrl = uri.toString()
-            database.child("users/${auth.currentUser!!.uid}/photo").setValue(photoUrl).addOnCompleteListener {
+            database.child("users/${currentUid()!!}/photo").setValue(photoUrl).addOnCompleteListener {
                 if (it.isSuccessful) {
                     onSuccess(photoUrl)
                 } else {
@@ -73,6 +73,7 @@ class FirebaseHelper(private val activity: Activity) {
         }
     }
 
-    fun currentUserReference(): DatabaseReference = database.child("users").child(auth.currentUser!!.uid)
+    fun currentUserReference(): DatabaseReference = database.child("users").child(currentUid()!!)
+    fun currentUid():String? = auth.currentUser?.uid
 
 }
