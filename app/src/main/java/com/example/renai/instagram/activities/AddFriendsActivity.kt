@@ -38,7 +38,7 @@ class AddFriendsActivity : AppCompatActivity(), FriendsAdapter.Listener {
         add_friends_recycler.layoutManager = LinearLayoutManager(this)
 
         mFirebase.database.child("users").addValueEventListener(ValueEventListenerAdapter {
-            val allUsers = it.children.map { it.asUser() }
+            val allUsers = it.children.map { it.asUser()!! }
             val (userList, otherUsersList) = allUsers.partition { it.uid == uid }
             mUser = userList.first()
             mUsers = otherUsersList
@@ -66,7 +66,7 @@ class AddFriendsActivity : AppCompatActivity(), FriendsAdapter.Listener {
             .setValueTrueOrRemove(follow)
 
         val feedPostsTask = task<Void> { taskSource ->
-            mFirebase.database.child("feed-post").child(uid).addListenerForSingleValueEvent(ValueEventListenerAdapter {
+            mFirebase.database.child("feed-posts").child(uid).addListenerForSingleValueEvent(ValueEventListenerAdapter {
                 val postsMap = if (follow) {
                     it.children.map { it.key to it.value }.toMap()
                 } else {
@@ -76,7 +76,6 @@ class AddFriendsActivity : AppCompatActivity(), FriendsAdapter.Listener {
                     .addOnCompleteListener(TaskSourceOnCompleteListener(taskSource))
             })
         }
-
         Tasks.whenAll(followsTask, followersTask, feedPostsTask).addOnCompleteListener {
             if (it.isSuccessful) {
                 onSuccess()
@@ -86,6 +85,7 @@ class AddFriendsActivity : AppCompatActivity(), FriendsAdapter.Listener {
         }
     }
 }
+
 
 class FriendsAdapter(private val listener: Listener) : RecyclerView.Adapter<FriendsAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -107,7 +107,7 @@ class FriendsAdapter(private val listener: Listener) : RecyclerView.Adapter<Frie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             val user = mUsers[position]
-            view.photo_image.loadImage(user.photo)
+            view.photo_image.loadUserPhoto(user.photo)
             view.username_text.text = user.username
             view.name_text.text = user.name
             view.follow_btn.setOnClickListener { listener.follow(user.uid) }

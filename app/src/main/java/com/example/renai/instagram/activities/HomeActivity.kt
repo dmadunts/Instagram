@@ -41,7 +41,7 @@ class HomeActivity : BaseActivity(0) {
             }
         }
         mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-            mUser = it.asUser()
+            mUser = it.asUser()!!
         })
     }
 
@@ -55,10 +55,10 @@ class HomeActivity : BaseActivity(0) {
             mFirebase.database.child("feed-posts").child(loginUser.uid)
                 .addValueEventListener(ValueEventListenerAdapter {
                     val posts = it.children.map { it.getValue(FeedPost::class.java)!! }
+                        .sortedByDescending { it.timestampDate() }
 
                     mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-                        val currentUser = it.asUser()
-                        feed_recycler.adapter = FeedAdapter(posts, currentUser)
+                        feed_recycler.adapter = FeedAdapter(posts)
                         feed_recycler.layoutManager = LinearLayoutManager(this)
                     })
                 })
@@ -66,7 +66,7 @@ class HomeActivity : BaseActivity(0) {
     }
 }
 
-class FeedAdapter(private val posts: List<FeedPost>, private val currentUser: User) :
+class FeedAdapter(private val posts: List<FeedPost>) :
     RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -80,8 +80,8 @@ class FeedAdapter(private val posts: List<FeedPost>, private val currentUser: Us
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
         with(holder) {
-            view.user_photo_image.loadImage(currentUser.photo)
-            view.username_text.text = currentUser.username
+            view.user_photo_image.loadUserPhoto(post.photo)
+            view.username_text.text = post.username
             view.post_image.loadImage(post.image)
             if (post.likesCount == 0) {
                 view.likes_text.visibility = View.GONE
@@ -93,7 +93,7 @@ class FeedAdapter(private val posts: List<FeedPost>, private val currentUser: Us
                 view.caption_text.visibility = View.GONE
             } else {
                 view.caption_text.visibility = View.VISIBLE
-                view.caption_text.setCaptionText(currentUser.username, post.caption)
+                view.caption_text.setCaptionText(post.username, post.caption)
             }
         }
     }
@@ -113,4 +113,5 @@ class FeedAdapter(private val posts: List<FeedPost>, private val currentUser: Us
         caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
         caption_text.movementMethod = LinkMovementMethod.getInstance()
     }
+
 }

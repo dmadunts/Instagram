@@ -40,7 +40,7 @@ class ProfileActivity : BaseActivity(4) {
 
         mFirebase = FirebaseHelper(this)
         mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-            mUser = it.asUser()
+            mUser = it.asUser()!!
             username_text.text = mUser.username
             profile_picture.loadUserPhoto(mUser.photo)
         })
@@ -49,6 +49,7 @@ class ProfileActivity : BaseActivity(4) {
         mFirebase.database.child("images").child(mFirebase.auth.currentUser!!.uid)
             .addValueEventListener(ValueEventListenerAdapter {
                 val images = it.children.map { it.getValue(String::class.java)!! }
+                    .sortedDescending()
                 images_recycler.adapter = ImagesAdapter(images)
             })
     }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -37,19 +38,19 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
     btn.isEnabled = inputs.all { it.text.isNotEmpty() }
 }
 
-fun ImageView.loadUserPhoto(photoUrl: String?) {
-    if (!(context as Activity).isDestroyed) {
+fun ImageView.loadImage(image: String?) =
+    ifNotDestroyed {
+        GlideApp.with(this).load(image).centerCrop().into(this)
+    }
+
+fun ImageView.loadUserPhoto(photoUrl: String?) =
+    ifNotDestroyed {
         GlideApp.with(this).load(photoUrl).fallback(R.drawable.person).into(this)
     }
-}
 
 fun Editable.toStringOrNull(): String? {
     val str = toString()
     return if (str.isEmpty()) null else str
-}
-
-fun ImageView.loadImage(image: String?) {
-    GlideApp.with(this).load(image).centerCrop().into(this)
 }
 
 fun <T> task(block: (TaskCompletionSource<T>) -> Unit): Task<T> {
@@ -58,6 +59,12 @@ fun <T> task(block: (TaskCompletionSource<T>) -> Unit): Task<T> {
     return taskSource.task
 }
 
-fun DataSnapshot.asUser(): User = getValue(User::class.java)!!.copy(uid = key!!)
+private fun View.ifNotDestroyed(block: () -> Unit) {
+    if (!(context as Activity).isDestroyed) {
+        block()
+    }
+}
+
+fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)
 
 
