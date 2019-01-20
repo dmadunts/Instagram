@@ -60,7 +60,7 @@ class ShareActivity : BaseActivity(2) {
                                     mFirebase.database.child("feed-posts").child(mFirebase.currentUid()!!)
                                         .push().setValue(makeFeedPost(imageDownloadUrl)).addOnCompleteListener {
                                             if (it.isSuccessful) {
-                                                showToast("Post added!")
+                                                showToast(getString(R.string.post_added))
                                             } else {
                                                 showToast(it.exception!!.message!!)
                                             }
@@ -72,7 +72,7 @@ class ShareActivity : BaseActivity(2) {
                     }
                 }
         } else {
-            showToast("No camera found")
+            showToast(getString(R.string.camera_not_found))
         }
     }
 

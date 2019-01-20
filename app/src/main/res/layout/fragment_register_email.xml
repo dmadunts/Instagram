@@ -16,13 +16,17 @@
     <EditText
             android:id="@+id/email_input"
             style="@style/big_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/person_image"
-            android:hint="E-mail"
+            android:hint="@string/e_mail"
             android:inputType="textEmailAddress"/>
 
     <Button
             android:id="@+id/next_btn"
             style="@style/big_btn"
-            android:text="Next"
+            android:text="@string/next"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/email_input"/>
 </android.support.constraint.ConstraintLayout>

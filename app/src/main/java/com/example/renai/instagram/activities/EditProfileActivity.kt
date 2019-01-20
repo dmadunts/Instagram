@@ -117,19 +117,20 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
                 }
             }
         } else {
-            showToast("You should enter your password.")
+            showToast(getString(R.string.you_should_enter_your_password))
         }
     }
+
+    private fun validate(user: User): String? =
+        when {
+            user.name.isEmpty() -> getString(R.string.please_enter_your_name)
+            user.username.isEmpty() -> getString(R.string.please_enter_your_username)
+            user.email.isEmpty() -> getString(R.string.please_enter_your_email)
+            else -> null
+        }
 }
 
 
-private fun validate(user: User): String? =
-    when {
-        user.name.isEmpty() -> "Please enter your Name"
-        user.username.isEmpty() -> "Please enter your Username"
-        user.email.isEmpty() -> "Please enter your E-mail"
-        else -> null
-    }
 
 
 

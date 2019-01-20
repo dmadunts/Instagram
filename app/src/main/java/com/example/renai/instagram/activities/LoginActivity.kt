@@ -50,7 +50,7 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
                         }
                     }
                 } else {
-                    showToast("Please enter e-mail and password")
+                    showToast(getString(R.string.please_enter_email_and_password))
                 }
             }
             R.id.create_account_text -> {

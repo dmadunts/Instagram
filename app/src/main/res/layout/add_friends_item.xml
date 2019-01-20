@@ -3,6 +3,7 @@
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
+                                             xmlns:tool="http://schemas.android.com/tools"
                                              android:paddingStart="10dp"
                                              android:paddingEnd="10dp"
                                              android:background="@color/white">
@@ -20,7 +21,7 @@
             android:id="@+id/username_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alan"
+            tool:text="Alan"
             app:layout_constraintStart_toEndOf="@id/photo_image"
             app:layout_constraintTop_toTopOf="@id/photo_image"
             app:layout_constraintBottom_toBottomOf="@id/photo_image"
@@ -33,7 +34,7 @@
             android:id="@+id/name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alan Doszanov"
+            tool:text="Alan Doszanov"
             app:layout_constraintStart_toStartOf="@id/username_text"
             app:layout_constraintTop_toBottomOf="@id/username_text"
             android:textColor="@color/black"/>
@@ -41,7 +42,7 @@
     <Button
             android:id="@+id/follow_btn"
             style="@style/follow_btn"
-            android:text="Follow"
+            android:text="@string/follow"
             android:visibility="gone"
             android:minHeight="0dp"
             android:minWidth="0dp"
@@ -52,7 +53,7 @@
     <Button
             android:id="@+id/following_btn"
             style="@style/following_btn"
-            android:text="Following"
+            android:text="@string/following"
             android:background="@drawable/border_grey"
             android:minHeight="0dp"
             android:minWidth="0dp"

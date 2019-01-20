@@ -47,10 +47,11 @@
             android:src="@drawable/person"/>
 
     <EditText
+            android:inputType="text"
             android:id="@+id/caption_input"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:hint="Enter a caption here..."
+            android:hint="@string/enter_a_caption_here"
             app:layout_constraintStart_toEndOf="@id/post_image"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"

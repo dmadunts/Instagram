@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import com.example.renai.instagram.R
-import kotlinx.android.synthetic.main.password_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_password.view.*
 
 class PasswordDialog : DialogFragment() {
     private lateinit var mListener: Listener
@@ -21,7 +21,7 @@ class PasswordDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = activity!!.layoutInflater.inflate(R.layout.password_dialog, null)
+        val view = activity!!.layoutInflater.inflate(R.layout.dialog_password, null)
         return AlertDialog.Builder(context).setView(view)
             .setTitle(R.string.please_enter_password)
             .setPositiveButton(android.R.string.ok) { _, _ ->
