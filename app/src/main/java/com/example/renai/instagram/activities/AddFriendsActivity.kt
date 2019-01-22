@@ -1,5 +1,10 @@
 package com.example.renai.instagram.activities
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -13,9 +18,27 @@ import com.example.renai.instagram.utils.FirebaseHelper
 import com.example.renai.instagram.utils.TaskSourceOnCompleteListener
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_add_friends.*
 import kotlinx.android.synthetic.main.add_friends_item.view.*
+
+class AddFriendsViewModel : ViewModel() {
+
+    private val _userAndFriends = MutableLiveData<Pair<User, List<User>>>()
+
+    init {
+        FirebaseDatabase.getInstance().reference.child("users").addValueEventListener(ValueEventListenerAdapter {
+            val allUsers = it.children.map { it.asUser()!! }
+            val (userList, allUsersList) = allUsers.partition { it.uid == FirebaseAuth.getInstance().currentUser!!.uid }
+            _userAndFriends.value = userList.first() to allUsersList
+        })
+    }
+
+
+    val users: LiveData<Pair<User, List<User>>> = _userAndFriends
+}
 
 class AddFriendsActivity : AppCompatActivity(), FriendsAdapter.Listener {
 
@@ -32,10 +55,20 @@ class AddFriendsActivity : AppCompatActivity(), FriendsAdapter.Listener {
 
         mFirebase = FirebaseHelper(this)
         mAdapter = FriendsAdapter(this)
+        val viewModel = ViewModelProviders.of(this).get(AddFriendsViewModel::class.java)
+
         back_image.setOnClickListener { finish() }
         val uid = mFirebase.currentUid()!!
         add_friends_recycler.adapter = mAdapter
         add_friends_recycler.layoutManager = LinearLayoutManager(this)
+
+        viewModel.users.observe(this, Observer {
+            it?.let { (user, otherUsers) ->
+                mUser = user
+                mUsers = otherUsers
+                mAdapter.update(mUsers, mUser.follows)
+            }
+        })
 
         mFirebase.database.child("users").addValueEventListener(ValueEventListenerAdapter {
             val allUsers = it.children.map { it.asUser()!! }
