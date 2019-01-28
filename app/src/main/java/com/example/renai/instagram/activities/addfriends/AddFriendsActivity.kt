@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.example.renai.instagram.R
+import com.example.renai.instagram.activities.ViewModelFactory
 import com.example.renai.instagram.models.User
 import kotlinx.android.synthetic.main.activity_add_friends.*
 
@@ -21,7 +22,7 @@ class AddFriendsActivity : AppCompatActivity(),
         setContentView(R.layout.activity_add_friends)
 
         mAdapter = FriendsAdapter(this)
-        mViewModel = ViewModelProviders.of(this, AddFriendsViewModelFactory())
+        mViewModel = ViewModelProviders.of(this, ViewModelFactory())
             .get(AddFriendsViewModel::class.java)
 
         back_image.setOnClickListener { finish() }

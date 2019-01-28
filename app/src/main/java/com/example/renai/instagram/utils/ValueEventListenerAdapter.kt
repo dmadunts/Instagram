@@ -7,7 +7,7 @@ import com.google.firebase.database.ValueEventListener
 
 class ValueEventListenerAdapter(val handler: (DataSnapshot) -> Unit) :
     ValueEventListener {
-    private val TAG = "ValueEventListenerAdapt"
+    private val TAG = "ValueEventListenerAdptr"
     override fun onDataChange(data: DataSnapshot) {
         handler(data)
     }

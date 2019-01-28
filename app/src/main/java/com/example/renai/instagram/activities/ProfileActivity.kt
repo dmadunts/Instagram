@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.activities.addfriends.AddFriendsActivity
+import com.example.renai.instagram.activities.editprofile.EditProfileActivity
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.FirebaseHelper
 import com.example.renai.instagram.utils.ValueEventListenerAdapter

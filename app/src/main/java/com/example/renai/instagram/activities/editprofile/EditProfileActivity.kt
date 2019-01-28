@@ -1,6 +1,8 @@
-package com.example.renai.instagram.activities
+package com.example.renai.instagram.activities.editprofile
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +10,10 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.example.renai.instagram.R
+import com.example.renai.instagram.activities.asUser
+import com.example.renai.instagram.activities.loadUserPhoto
+import com.example.renai.instagram.activities.showToast
+import com.example.renai.instagram.activities.toStringOrNull
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.CameraHelper
 import com.example.renai.instagram.utils.FirebaseHelper
@@ -22,7 +28,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
     private lateinit var mPendingUser: User
     private lateinit var mFirebase: FirebaseHelper
     private lateinit var mCamera: CameraHelper
-
+    private lateinit var mViewModel: EditProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,18 +36,31 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         Log.d(TAG, "onCreate")
 
         mCamera = CameraHelper(this)
-        mFirebase = FirebaseHelper(this)
         save_image.setOnClickListener { updateProfile() }
         back_image.setOnClickListener { finish() }
         change_photo_text.setOnClickListener { mCamera.takeCameraPicture() }
 
+        mFirebase = FirebaseHelper(this)
+        mViewModel = ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
+
+        mViewModel.user.observe(this, Observer {
+            it.let {
+                //mUser = it
+                name_input.setText(mUser.name)
+                username_input.setText(mUser.username)
+                bio_input.setText(mUser.bio)
+                website_input.setText(mUser.website)
+                phone_input.setText(mUser.phone?.toString())
+                email_input.setText(mUser.email)
+                profile_image.loadUserPhoto(mUser.photo)
+            }
+        })
         //Spinner
         val spinner: Spinner = findViewById(R.id.edit_profile_spinner)
         ArrayAdapter.createFromResource(this, R.array.genders_array, android.R.layout.simple_spinner_item)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
-
 
                 mFirebase.currentUserReference()
                     .addListenerForSingleValueEvent(ValueEventListenerAdapter {
