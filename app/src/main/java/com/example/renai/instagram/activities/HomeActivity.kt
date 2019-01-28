@@ -24,7 +24,6 @@ import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.feed_item.view.*
-import java.lang.StringBuilder
 
 class HomeActivity : BaseActivity(0), FeedAdapter.Listener {
     private val TAG = "HomeActivity"
@@ -45,9 +44,6 @@ class HomeActivity : BaseActivity(0), FeedAdapter.Listener {
                 finish()
             }
         }
-        mFirebase.currentUserReference().addValueEventListener(ValueEventListenerAdapter {
-            mUser = it.asUser()!!
-        })
     }
 
 
@@ -95,7 +91,7 @@ class HomeActivity : BaseActivity(0), FeedAdapter.Listener {
 
     override fun onDestroy() {
         super.onDestroy()
-        mLikesListener.values.forEach{mFirebase.database.removeEventListener(it)}
+        mLikesListener.values.forEach { mFirebase.database.removeEventListener(it) }
     }
 }
 

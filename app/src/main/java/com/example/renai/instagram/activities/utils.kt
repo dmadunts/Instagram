@@ -1,6 +1,8 @@
 package com.example.renai.instagram.activities
 
 import android.app.Activity
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -70,5 +72,5 @@ private fun View.ifNotDestroyed(block: () -> Unit) {
 fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)
 fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)?.copy(id = key!!)
 fun DatabaseReference.setValueTrueOrRemove(value: Boolean) = if (value) setValue(true) else removeValue()
-
+fun <A, B> LiveData<A>.map(f: (A) -> B): LiveData<B> = Transformations.map(this, f)
 

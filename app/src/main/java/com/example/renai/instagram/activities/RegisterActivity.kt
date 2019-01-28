@@ -95,7 +95,7 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
         fullName.toLowerCase().replace(" ", ".")
 
     private fun DatabaseReference.createUser(uid: String, user: User, onSuccess: () -> Unit) {
-        val reference = child("users").child(uid)
+        val reference = child("usersAndFriends").child(uid)
         reference.setValue(user).addOnCompleteListener {
             if (it.isSuccessful) {
                 onSuccess()
