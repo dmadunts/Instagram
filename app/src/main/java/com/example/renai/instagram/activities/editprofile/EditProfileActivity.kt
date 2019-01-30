@@ -2,15 +2,13 @@ package com.example.renai.instagram.activities.editprofile
 
 import android.app.Activity
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.example.renai.instagram.R
-import com.example.renai.instagram.activities.ViewModelFactory
+import com.example.renai.instagram.activities.BaseActivity
 import com.example.renai.instagram.activities.loadUserPhoto
 import com.example.renai.instagram.activities.showToast
 import com.example.renai.instagram.activities.toStringOrNull
@@ -19,7 +17,7 @@ import com.example.renai.instagram.utils.CameraHelper
 import com.example.renai.instagram.views.PasswordDialog
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
-class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
+class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
     private lateinit var mUser: User
     private lateinit var mPendingUser: User
     private lateinit var mCamera: CameraHelper
@@ -39,7 +37,7 @@ class EditProfileActivity : AppCompatActivity(), PasswordDialog.Listener {
         back_image.setOnClickListener { finish() }
         change_photo_text.setOnClickListener { mCamera.takeCameraPicture() }
 
-        mViewModel = ViewModelProviders.of(this, ViewModelFactory()).get(EditProfileViewModel::class.java)
+        mViewModel = initViewModel()
 
         mViewModel.user.observe(this, Observer {
             it?.let {

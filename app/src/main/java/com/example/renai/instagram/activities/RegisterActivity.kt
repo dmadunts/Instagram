@@ -20,7 +20,9 @@ import kotlinx.android.synthetic.main.fragment_register_email.*
 import kotlinx.android.synthetic.main.fragment_register_namepass.*
 
 class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFragment.Listener {
-    private val TAG = "RegisterActivity"
+    companion object {
+        const val TAG = "RegisterActivity"
+    }
 
     private var mEmail: String? = null
 

@@ -12,8 +12,11 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View.OnClickListener {
-    private val TAG = "LoginActivity"
     private lateinit var mAuth: FirebaseAuth
+
+    companion object {
+        const val TAG = "LoginActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +26,7 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
         //Listener for keyboard open/close state.
         //Used in conjunction with scrollview in case of currentUser focused TextEdits
         // to resize window and let Buttons stay reachable
-        KeyboardVisibilityEvent.setEventListener(this,this)
+        KeyboardVisibilityEvent.setEventListener(this, this)
 
         //Method-StateChanger for buttons
         coordinateBtnAndInputs(login_btn, email_input, password_input)

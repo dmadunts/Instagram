@@ -21,21 +21,25 @@ import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.FirebaseHelper
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
+import com.example.renai.instagram.views.setupBottomNavigation
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.feed_item.view.*
 
-class HomeActivity : BaseActivity(0), FeedAdapter.Listener {
-    private val TAG = "HomeActivity"
+class HomeActivity : BaseActivity(), FeedAdapter.Listener {
     private lateinit var mFirebase: FirebaseHelper
     private lateinit var mAdapter: FeedAdapter
     private lateinit var mUser: User
     private var mLikesListener: Map<String, ValueEventListener> = emptyMap()
 
+    companion object {
+        const val TAG = "HomeActivity"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        setupBottomNavigation()
+        setupBottomNavigation(0)
         mFirebase = FirebaseHelper(this)
 
         mFirebase.auth.addAuthStateListener {

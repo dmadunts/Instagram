@@ -13,11 +13,10 @@ import com.example.renai.instagram.utils.GlideApp
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import kotlinx.android.synthetic.main.activity_share.*
 
-class ShareActivity : BaseActivity(2) {
+class ShareActivity : BaseActivity() {
     private lateinit var mCamera: CameraHelper
     private lateinit var mFirebase: FirebaseHelper
     private lateinit var mUser: User
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
