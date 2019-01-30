@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.example.renai.instagram.R
 import com.example.renai.instagram.activities.ViewModelFactory
+import com.example.renai.instagram.activities.showToast
 import com.example.renai.instagram.models.User
 import kotlinx.android.synthetic.main.activity_add_friends.*
 
@@ -53,6 +54,6 @@ class AddFriendsActivity : AppCompatActivity(),
     private fun setFollow(uid: String, follow: Boolean, onSuccess: () -> Unit) {
         mViewModel.setFollow(mUser.uid, uid, follow)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { it.message }
+            .addOnFailureListener { showToast(it.message) }
     }
 }

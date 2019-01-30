@@ -55,12 +55,12 @@ class FriendsAdapter(private val listener: Listener) : RecyclerView.Adapter<Frie
     }
 
     fun followed(uid: String) {
-        mFollows += (uid to true)
+        mFollows = mFollows + (uid to true)
         notifyItemChanged(mPositions[uid]!!)
     }
 
     fun unfollowed(uid: String) {
-        mFollows -= uid
+        mFollows = mFollows - uid
         notifyItemChanged(mPositions[uid]!!)
     }
 }

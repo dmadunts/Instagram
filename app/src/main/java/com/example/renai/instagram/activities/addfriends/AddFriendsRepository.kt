@@ -5,10 +5,10 @@ import com.example.renai.instagram.activities.asUser
 import com.example.renai.instagram.activities.map
 import com.example.renai.instagram.activities.task
 import com.example.renai.instagram.models.User
-import com.example.renai.instagram.utils.FirebaseLiveData
 import com.example.renai.instagram.utils.TaskSourceOnCompleteListener
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import com.example.renai.instagram.utils.database
+import com.example.renai.instagram.utils.liveData
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +27,7 @@ interface AddFriendsRepository {
 class FirebaseAddFriendsRepository : AddFriendsRepository {
 
     override fun getUsers(): LiveData<List<User>> =
-        FirebaseLiveData(database.child("users")).map {
+        database.child("users").liveData().map {
             it.children.map { it.asUser()!! }
         }
 

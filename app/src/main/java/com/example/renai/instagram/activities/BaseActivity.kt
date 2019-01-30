@@ -1,14 +1,18 @@
 package com.example.renai.instagram.activities
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.example.renai.instagram.R
 import kotlinx.android.synthetic.main.bottom_navigation_view.*
-import kotlinx.android.synthetic.main.bottom_navigation_view.view.*
 
 abstract class BaseActivity(val navNumber: Int) : AppCompatActivity() {
-    private val TAG = "BaseActivity"
+    companion object {
+        const val TAG = "BaseActivity"
+    }
+
     fun setupBottomNavigation() {
         bottom_navigation_view.setIconSize(29f, 29f)
         bottom_navigation_view.setTextVisibility(false)
@@ -41,6 +45,11 @@ abstract class BaseActivity(val navNumber: Int) : AppCompatActivity() {
                 false
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onResume() {
