@@ -6,15 +6,16 @@ import com.example.renai.instagram.activities.addfriends.AddFriendsViewModel
 import com.example.renai.instagram.activities.editprofile.EditProfileViewModel
 import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
+import com.google.android.gms.tasks.OnFailureListener
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory : ViewModelProvider.Factory {
+class ViewModelFactory(private val onFailureListener: OnFailureListener) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddFriendsViewModel::class.java)) {
-            return AddFriendsViewModel(FirebaseUsersRepository(), FirebaseFeedPostsRepository()) as T
+            return AddFriendsViewModel(onFailureListener, FirebaseUsersRepository(), FirebaseFeedPostsRepository()) as T
 
         } else if (modelClass.isAssignableFrom(EditProfileViewModel::class.java)) {
-            return EditProfileViewModel(FirebaseUsersRepository()) as T
+            return EditProfileViewModel(onFailureListener, FirebaseUsersRepository()) as T
 
         } else {
             error("Unknown viewmodel class: $modelClass")

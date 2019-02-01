@@ -18,7 +18,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.FeedPost
-import com.example.renai.instagram.models.User
 import com.example.renai.instagram.utils.FirebaseHelper
 import com.example.renai.instagram.utils.ValueEventListenerAdapter
 import com.example.renai.instagram.views.setupBottomNavigation
@@ -29,7 +28,6 @@ import kotlinx.android.synthetic.main.feed_item.view.*
 class HomeActivity : BaseActivity(), FeedAdapter.Listener {
     private lateinit var mFirebase: FirebaseHelper
     private lateinit var mAdapter: FeedAdapter
-    private lateinit var mUser: User
     private var mLikesListener: Map<String, ValueEventListener> = emptyMap()
 
     companion object {
@@ -48,6 +46,7 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
                 finish()
             }
         }
+
     }
 
 
@@ -136,7 +135,6 @@ class FeedAdapter(private var listener: Listener, private val posts: List<FeedPo
                 likes_text.visibility = View.GONE
             } else {
                 likes_text.visibility = View.VISIBLE
-                //likes_text.text = likes.likesCount.toString() + holder.view.context.getString(R.string.whitespace) + holder.view.context.resources.getQuantityString(R.plurals.likes_count, likes.likesCount)
                 likes_text.text = StringBuilder()
                     .append(likes.likesCount)
                     .append(context.getString(R.string.whitespace))

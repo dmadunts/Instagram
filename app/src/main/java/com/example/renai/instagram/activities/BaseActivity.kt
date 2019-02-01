@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
 abstract class BaseActivity : AppCompatActivity() {
-    private lateinit var commonViewModel: CommonViewModel
+    protected lateinit var commonViewModel: CommonViewModel
 
     companion object {
         const val TAG = "BaseActivity"
@@ -25,6 +25,6 @@ abstract class BaseActivity : AppCompatActivity() {
         })
     }
 
-    inline fun <reified T : ViewModel?> initViewModel(): T =
-        ViewModelProviders.of(this, ViewModelFactory()).get(T::class.java)
+    protected inline fun <reified T : ViewModel?> initViewModel(): T =
+        ViewModelProviders.of(this, ViewModelFactory(commonViewModel)).get(T::class.java)
 }

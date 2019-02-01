@@ -11,3 +11,4 @@ var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 var storage: StorageReference = FirebaseStorage.getInstance().reference
 
 fun currentUid():String? = auth.currentUser?.uid
+fun currentUserReference(): DatabaseReference = database.child("users").child(currentUid()!!)

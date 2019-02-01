@@ -62,9 +62,7 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == mCamera.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            mViewModel.uploadAndSetPhoto(mCamera.imageUri!!).addOnFailureListener {
-                showToast(it.message)
-            }
+            mViewModel.uploadAndSetPhoto(mCamera.imageUri!!)
         }
     }
 
@@ -95,7 +93,6 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
 
     private fun updateUser(user: User) {
         mViewModel.updateUserProfile(currentUser = mUser, newUser = user)
-            .addOnFailureListener { showToast(it.message) }
             .addOnSuccessListener {
                 showToast("Profile saved")
                 finish()
@@ -109,7 +106,6 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
                 newEmail = mPendingUser.email,
                 password = password
             )
-                .addOnFailureListener { showToast(it.message) }
                 .addOnSuccessListener { updateUser(mPendingUser) }
         }
     }
