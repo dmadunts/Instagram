@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.renai.instagram.views.KeyboardAwareScrollView
+<com.example.renai.instagram.screens.common.KeyboardAwareScrollView
         android:id="@+id/login_scrollView"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            tools:context=".activities.LoginActivity">
+            tools:context=".screens.LoginActivity">
 
         <ImageView
                 android:id="@+id/instagram_image"
@@ -60,4 +60,4 @@
                 android:gravity="center"
                 android:background="@drawable/top_border_grey"/>
     </android.support.constraint.ConstraintLayout>
-</com.example.renai.instagram.views.KeyboardAwareScrollView>
+</com.example.renai.instagram.screens.common.KeyboardAwareScrollView>

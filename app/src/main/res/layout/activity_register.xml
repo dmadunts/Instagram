@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.renai.instagram.views.KeyboardAwareScrollView
+<com.example.renai.instagram.screens.common.KeyboardAwareScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/register_scrollView"
@@ -10,8 +10,8 @@
             android:id="@+id/frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activities.RegisterActivity"
+            tools:context=".screens.RegisterActivity"
             >
 
     </FrameLayout>
-</com.example.renai.instagram.views.KeyboardAwareScrollView>
+</com.example.renai.instagram.screens.common.KeyboardAwareScrollView>

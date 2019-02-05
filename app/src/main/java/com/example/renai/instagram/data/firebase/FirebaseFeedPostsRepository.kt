@@ -1,11 +1,11 @@
 package com.example.renai.instagram.data.firebase
 
-import com.example.renai.instagram.activities.task
+import com.example.renai.instagram.common.TaskSourceOnCompleteListener
+import com.example.renai.instagram.common.ValueEventListenerAdapter
+import com.example.renai.instagram.common.task
+import com.example.renai.instagram.common.toUnit
 import com.example.renai.instagram.data.FeedPostsRepository
-import com.example.renai.instagram.utils.TaskSourceOnCompleteListener
-import com.example.renai.instagram.utils.ValueEventListenerAdapter
-import com.example.renai.instagram.utils.database
-import com.example.renai.instagram.utils.toUnit
+import com.example.renai.instagram.data.firebase.common.database
 import com.google.android.gms.tasks.Task
 
 class FirebaseFeedPostsRepository : FeedPostsRepository {
@@ -21,7 +21,11 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
 
                     database.child("feed-posts").child(uid).updateChildren(postsMap)
                         .toUnit()
-                        .addOnCompleteListener(TaskSourceOnCompleteListener(taskSource))
+                        .addOnCompleteListener(
+                            TaskSourceOnCompleteListener(
+                                taskSource
+                            )
+                        )
                 })
         }
 
@@ -36,7 +40,11 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
 
                     database.child("feed-posts").child(uid).updateChildren(postsMap)
                         .toUnit()
-                        .addOnCompleteListener(TaskSourceOnCompleteListener(taskSource))
+                        .addOnCompleteListener(
+                            TaskSourceOnCompleteListener(
+                                taskSource
+                            )
+                        )
                 })
         }
 }

@@ -2,11 +2,11 @@ package com.example.renai.instagram.data.firebase
 
 import android.arch.lifecycle.LiveData
 import android.net.Uri
-import com.example.renai.instagram.activities.asUser
-import com.example.renai.instagram.activities.map
+import com.example.renai.instagram.common.toUnit
 import com.example.renai.instagram.data.UsersRepository
+import com.example.renai.instagram.data.common.map
+import com.example.renai.instagram.data.firebase.common.*
 import com.example.renai.instagram.models.User
-import com.example.renai.instagram.utils.*
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.EmailAuthProvider
