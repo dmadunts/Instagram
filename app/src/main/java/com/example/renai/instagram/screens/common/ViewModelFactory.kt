@@ -6,6 +6,7 @@ import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.screens.addfriends.AddFriendsViewModel
 import com.example.renai.instagram.screens.editprofile.EditProfileViewModel
+import com.example.renai.instagram.screens.home.HomeViewModel
 import com.google.android.gms.tasks.OnFailureListener
 
 @Suppress("UNCHECKED_CAST")
@@ -16,7 +17,8 @@ class ViewModelFactory(private val onFailureListener: OnFailureListener) : ViewM
 
         } else if (modelClass.isAssignableFrom(EditProfileViewModel::class.java)) {
             return EditProfileViewModel(onFailureListener, FirebaseUsersRepository()) as T
-
+        } else if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            return HomeViewModel(onFailureListener, FirebaseFeedPostsRepository()) as T
         } else {
             error("Unknown viewmodel class: $modelClass")
         }

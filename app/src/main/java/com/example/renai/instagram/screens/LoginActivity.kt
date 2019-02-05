@@ -8,6 +8,7 @@ import android.view.View
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
 import com.example.renai.instagram.screens.common.showToast
+import com.example.renai.instagram.screens.home.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent

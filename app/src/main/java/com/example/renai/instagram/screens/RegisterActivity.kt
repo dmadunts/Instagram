@@ -13,6 +13,7 @@ import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
 import com.example.renai.instagram.screens.common.showToast
+import com.example.renai.instagram.screens.home.HomeActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
