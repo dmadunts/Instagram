@@ -26,8 +26,9 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
         val reference = database.child("likes")
             .child(postId).child(uid)
         return task { taskSource ->
-            reference.addValueEventListener(ValueEventListenerAdapter {
+            reference.addListenerForSingleValueEvent(ValueEventListenerAdapter {
                 reference.setValueTrueOrRemove(!it.exists())
+                taskSource.setResult(Unit)
             })
         }
     }

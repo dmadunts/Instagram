@@ -77,6 +77,4 @@ class FirebaseUsersRepository : UsersRepository {
         FirebaseLiveData(database.child("users").child(currentUid()!!)).map {
             it.asUser()!!
         }
-
-
 }

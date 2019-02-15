@@ -13,6 +13,7 @@ class HomeViewModel(
 ) : ViewModel() {
     lateinit var uid: String
     lateinit var feedPosts: LiveData<List<FeedPost>>
+    private var loadedLikes = mapOf<String, LiveData<FeedPostLikes>>()
 
     fun init(uid: String) {
         this.uid = uid
@@ -25,15 +26,20 @@ class HomeViewModel(
         feedPostsRepository.toggleLike(postId, uid).addOnFailureListener(onFailureListener)
     }
 
-    fun getLikes(postId: String): LiveData<FeedPostLikes> {
+    fun getLikes(postId: String): LiveData<FeedPostLikes>? = loadedLikes[postId]
 
-    }
-
-    fun loadLikes(postId: String): LiveData<FeedPostLikes>{
-        feedPostsRepository.getLikes(postId)
-        val userLikes = it.children.map { it.key }.toSet()
-        val postLikes = FeedPostLikes(
-            userLikes.size,
-            userLikes.contains(mFirebase.currentUid())
+    fun loadLikes(postId: String): LiveData<FeedPostLikes> {
+        val existingLoadedLikes = loadedLikes[postId]
+        if (existingLoadedLikes == null) {
+            val liveData = feedPostsRepository.getLikes(postId).map { likes ->
+                FeedPostLikes(
+                    likesCount = likes.size,
+                    likedByUser = likes.find { it.userId == postId } != null)
+            }
+            loadedLikes = loadedLikes + (postId to liveData)
+            return liveData
+        } else {
+            return existingLoadedLikes
+        }
     }
 }
