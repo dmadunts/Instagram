@@ -4,7 +4,9 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.common.map
+import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.FeedPost
+import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.OnFailureListener
 
 class HomeViewModel(
@@ -34,7 +36,7 @@ class HomeViewModel(
             val liveData = feedPostsRepository.getLikes(postId).map { likes ->
                 FeedPostLikes(
                     likesCount = likes.size,
-                    likedByUser = likes.find { it.userId == postId } != null)
+                    likedByUser = likes.find { it.userId == uid } != null)
             }
             loadedLikes = loadedLikes + (postId to liveData)
             return liveData

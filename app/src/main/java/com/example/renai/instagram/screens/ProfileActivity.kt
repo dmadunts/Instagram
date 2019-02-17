@@ -20,6 +20,7 @@ import com.example.renai.instagram.screens.common.loadImage
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setupBottomNavigation
 import com.example.renai.instagram.screens.editprofile.EditProfileActivity
+import com.example.renai.instagram.screens.profilesettings.ProfileSettingsActivity
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : BaseActivity() {

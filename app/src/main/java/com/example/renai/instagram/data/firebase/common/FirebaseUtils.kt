@@ -17,5 +17,4 @@ var auth: FirebaseAuth = FirebaseAuth.getInstance()
 var database: DatabaseReference = FirebaseDatabase.getInstance()
     .reference
 var storage: StorageReference = FirebaseStorage.getInstance().reference
-fun DatabaseReference.liveData(): LiveData<DataSnapshot> =
-    FirebaseLiveData(this)
+fun DatabaseReference.liveData(): LiveData<DataSnapshot> = FirebaseLiveData(this)

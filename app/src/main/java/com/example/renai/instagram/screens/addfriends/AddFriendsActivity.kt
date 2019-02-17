@@ -48,7 +48,7 @@ class AddFriendsActivity : BaseActivity(),
     }
 
     private fun setFollow(uid: String, follow: Boolean, onSuccess: () -> Unit) {
-        mViewModel.setFollow(mUser.uid, uid, follow)
+        mViewModel.setFollow(mUser.uid!!, uid, follow)
             .addOnSuccessListener { onSuccess() }
     }
 }

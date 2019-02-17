@@ -23,7 +23,7 @@
         <activity android:name=".screens.ProfileActivity"/>
         <activity android:name=".screens.SearchActivity"/>
         <activity android:name=".screens.editprofile.EditProfileActivity"/>
-        <activity android:name=".screens.ProfileSettingsActivity"/>
+        <activity android:name=".screens.profilesettings.ProfileSettingsActivity"/>
         <activity android:name="com.example.renai.instagram.screens.addfriends.AddFriendsActivity"/>
         <activity
                 android:name=".screens.LoginActivity"

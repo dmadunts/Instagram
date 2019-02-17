@@ -1,6 +1,7 @@
 package com.example.renai.instagram.screens.home
 
 import android.graphics.Typeface
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableString
@@ -14,13 +15,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.renai.instagram.R
+import com.example.renai.instagram.common.SimpleCallback
 import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.screens.common.loadImage
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.showToast
 import kotlinx.android.synthetic.main.feed_item.view.*
 
-class FeedAdapter(private var listener: Listener, private val posts: List<FeedPost>) :
+class FeedAdapter(private var listener: Listener) :
     RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
     interface Listener {
         fun toggleLike(postId: String)
@@ -29,6 +31,7 @@ class FeedAdapter(private var listener: Listener, private val posts: List<FeedPo
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
+    private var posts = listOf<FeedPost>()
     private var postLikes: Map<Int, FeedPostLikes> = emptyMap()
     private val defaultPostLikes = FeedPostLikes(0, false)
 
@@ -89,4 +92,11 @@ class FeedAdapter(private var listener: Listener, private val posts: List<FeedPo
         caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
         caption_text.movementMethod = LinkMovementMethod.getInstance()
     }
+
+    fun updatePosts(newPosts: List<FeedPost>) {
+        val diffResult = DiffUtil.calculateDiff(SimpleCallback(this.posts, newPosts, {it.id}))
+        this.posts = newPosts
+        diffResult.dispatchUpdatesTo(this)
+    }
 }
+
