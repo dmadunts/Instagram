@@ -17,4 +17,5 @@ interface UsersRepository {
     fun removeFollow(userUid: String, followUid: String): Task<Unit>
     fun addFollower(userUid: String, followUid: String): Task<Unit>
     fun removeFollower(userUid: String, followUid: String): Task<Unit>
+    fun getImages(uid: String): LiveData<List<String>>
 }

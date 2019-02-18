@@ -31,28 +31,28 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
         save_image.setOnClickListener { updateProfile() }
         back_image.setOnClickListener { finish() }
         change_photo_text.setOnClickListener { mCamera.takeCameraPicture() }
-
-        mViewModel = initViewModel()
-
-        mViewModel.user.observe(this, Observer {
-            it?.let {
-                mUser = it
-                name_input.setText(mUser.name)
-                username_input.setText(mUser.username)
-                bio_input.setText(mUser.bio)
-                website_input.setText(mUser.website)
-                phone_input.setText(mUser.phone?.toString())
-                email_input.setText(mUser.email)
-                profile_image.loadUserPhoto(mUser.photo)
-            }
-        })
-        //Spinner
         val spinner: Spinner = findViewById(R.id.edit_profile_spinner)
         ArrayAdapter.createFromResource(this, R.array.genders_array, android.R.layout.simple_spinner_item)
             .also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = adapter
             }
+
+        setupAuthGuard {
+            mViewModel = initViewModel()
+            mViewModel.user.observe(this, Observer {
+                it?.let {
+                    mUser = it
+                    name_input.setText(mUser.name)
+                    username_input.setText(mUser.username)
+                    bio_input.setText(mUser.bio)
+                    website_input.setText(mUser.website)
+                    phone_input.setText(mUser.phone?.toString())
+                    email_input.setText(mUser.email)
+                    profile_image.loadUserPhoto(mUser.photo)
+                }
+            })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

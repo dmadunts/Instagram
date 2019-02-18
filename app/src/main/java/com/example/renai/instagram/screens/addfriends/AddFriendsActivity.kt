@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.BaseActivity
+import com.example.renai.instagram.screens.common.setupAuthGuard
 import kotlinx.android.synthetic.main.activity_add_friends.*
 
 class AddFriendsActivity : BaseActivity(),
@@ -20,19 +21,21 @@ class AddFriendsActivity : BaseActivity(),
         setContentView(R.layout.activity_add_friends)
 
         mAdapter = FriendsAdapter(this)
-        mViewModel = initViewModel()
 
-        back_image.setOnClickListener { finish() }
-        add_friends_recycler.adapter = mAdapter
-        add_friends_recycler.layoutManager = LinearLayoutManager(this)
+        setupAuthGuard {
+            mViewModel = initViewModel()
 
-        mViewModel.usersAndFriends.observe(this, Observer {
-            it?.let { (user, otherUsers) ->
-                mUser = user
-                mUsers = otherUsers
-                mAdapter.update(mUsers, mUser.follows)
-            }
-        })
+            back_image.setOnClickListener { finish() }
+            add_friends_recycler.adapter = mAdapter
+            add_friends_recycler.layoutManager = LinearLayoutManager(this)
+
+            mViewModel.usersAndFriends.observe(this, Observer {
+                it?.let { (user, otherUsers) ->
+                    mUser = user
+                    mAdapter.update(otherUsers, mUser.follows)
+                }
+            })
+        }
     }
 
     override fun follow(uid: String) {
@@ -48,7 +51,7 @@ class AddFriendsActivity : BaseActivity(),
     }
 
     private fun setFollow(uid: String, follow: Boolean, onSuccess: () -> Unit) {
-        mViewModel.setFollow(mUser.uid!!, uid, follow)
+        mViewModel.setFollow(mUser.uid, uid, follow)
             .addOnSuccessListener { onSuccess() }
     }
 }

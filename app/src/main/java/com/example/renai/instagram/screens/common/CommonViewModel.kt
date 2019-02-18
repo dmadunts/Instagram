@@ -7,9 +7,13 @@ import com.google.android.gms.tasks.OnFailureListener
 
 class CommonViewModel : ViewModel(), OnFailureListener {
     private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
+    var errorMessage: LiveData<String> = _errorMessage
 
     override fun onFailure(e: Exception) {
-        _errorMessage.value = e.message
+        setErrorMessage(e.message)
+    }
+
+    fun setErrorMessage(message: String?) {
+        message?.let { _errorMessage.value = it }
     }
 }

@@ -13,8 +13,8 @@ import com.google.firebase.storage.StorageReference
 fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)
 fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)?.copy(id = key!!)
 fun DatabaseReference.setValueTrueOrRemove(value: Boolean) = if (value) setValue(true) else removeValue()
-var auth: FirebaseAuth = FirebaseAuth.getInstance()
-var database: DatabaseReference = FirebaseDatabase.getInstance()
+val auth: FirebaseAuth = FirebaseAuth.getInstance()
+val database: DatabaseReference = FirebaseDatabase.getInstance()
     .reference
-var storage: StorageReference = FirebaseStorage.getInstance().reference
+val storage: StorageReference = FirebaseStorage.getInstance().reference
 fun DatabaseReference.liveData(): LiveData<DataSnapshot> = FirebaseLiveData(this)

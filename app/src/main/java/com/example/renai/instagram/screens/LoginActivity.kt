@@ -1,21 +1,23 @@
 package com.example.renai.instagram.screens
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.example.renai.instagram.R
+import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
-import com.example.renai.instagram.screens.common.showToast
+import com.example.renai.instagram.screens.common.setupAuthGuard
 import com.example.renai.instagram.screens.home.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
-class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View.OnClickListener {
+class LoginActivity : BaseActivity(), KeyboardVisibilityEventListener, View.OnClickListener {
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var mViewModel: LoginViewModel
 
     companion object {
         const val TAG = "LoginActivity"
@@ -37,31 +39,28 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
         login_btn.setOnClickListener(this)
         create_account_text.setOnClickListener(this)
 
-        //Instance for FirebaseAuth
-        mAuth = FirebaseAuth.getInstance()
+        setupAuthGuard {
+            mViewModel = initViewModel()
+            mViewModel.goToHomeScreen.observe(this, Observer {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+            })
+            mViewModel.goToRegisterScreen.observe(this, Observer {
+                startActivity(Intent(this, RegisterActivity::class.java))
+            })
+            mAuth = FirebaseAuth.getInstance()
+        }
     }
 
     override fun onClick(v: View) {
         when (v.id) {
             R.id.login_btn -> {
-                val email = email_input.text.toString()
-                val password = password_input.text.toString()
-                if (validate(email, password)) {
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            startActivity(Intent(this, HomeActivity::class.java))
-                            finish()
-                        } else {
-                            showToast(it.exception!!.message!!)
-                        }
-                    }
-                } else {
-                    showToast(getString(R.string.please_enter_email_and_password))
-                }
+                mViewModel.onLoginClick(
+                    email = email_input.text.toString(),
+                    password = password_input.text.toString()
+                )
             }
-            R.id.create_account_text -> {
-                startActivity(Intent(this, RegisterActivity::class.java))
-            }
+            R.id.create_account_text -> mViewModel.onRegisterClick()
         }
     }
 
@@ -75,7 +74,4 @@ class LoginActivity : AppCompatActivity(), KeyboardVisibilityEventListener, View
             create_account_text.visibility = View.VISIBLE
         }
     }
-
-    private fun validate(email: String, password: String) =
-        email.isNotEmpty() && password.isNotEmpty()
 }

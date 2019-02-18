@@ -13,6 +13,12 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 
 class FirebaseUsersRepository : UsersRepository {
+    override fun getImages(uid: String): LiveData<List<String>> {
+        return FirebaseLiveData(database.child("images").child(uid)).map {
+            it.children.map { it.getValue(String::class.java)!! }.sortedDescending()
+        }
+    }
+
     override fun getUsers(): LiveData<List<User>> =
         database.child("users").liveData().map {
             it.children.map { it.asUser()!! }
