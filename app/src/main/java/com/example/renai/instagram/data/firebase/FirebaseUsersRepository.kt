@@ -13,9 +13,11 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 
 class FirebaseUsersRepository : UsersRepository {
-    override fun createUser(user: User, password: String) {
-        auth.createUserWithEmailAndPassword(user.email, password)
-    }
+    override fun createUser(user: User, password: String): Task<Unit> =
+        auth.createUserWithEmailAndPassword(user.email, password).onSuccessTask {
+            database.child("users").child(it!!.user.uid).setValue(user)
+        }.toUnit()
+
 
     override fun isUserExistsForEmail(email: String): Task<Boolean> =
         auth.fetchSignInMethodsForEmail(email).onSuccessTask {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.common.BaseActivity
+import com.example.renai.instagram.screens.common.setupAuthGuard
 import com.example.renai.instagram.screens.common.setupBottomNavigation
 
 class SearchActivity : BaseActivity() {
@@ -16,5 +17,7 @@ class SearchActivity : BaseActivity() {
         setContentView(R.layout.activity_home)
         setupBottomNavigation(1)
         Log.d(TAG, "onCreate")
+
+        setupAuthGuard {  }
     }
 }

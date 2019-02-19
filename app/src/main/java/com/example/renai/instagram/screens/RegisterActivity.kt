@@ -5,21 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.renai.instagram.R
-import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
-import com.example.renai.instagram.screens.common.showToast
 import com.example.renai.instagram.screens.home.HomeActivity
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_register_email.*
 import kotlinx.android.synthetic.main.fragment_register_namepass.*
 
@@ -28,22 +20,25 @@ class RegisterActivity : BaseActivity(), EmailFragment.Listener, NamePassFragmen
         const val TAG = "RegisterActivity"
     }
 
-    private var mEmail: String? = null
     private lateinit var mViewModel: RegisterViewModel
-    private lateinit var mAuth: FirebaseAuth
-    private lateinit var mDatabase: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        mAuth = FirebaseAuth.getInstance()
-        mDatabase = FirebaseDatabase.getInstance().reference
 
         mViewModel = initViewModel()
         mViewModel.goToNamePassScreen.observe(this, Observer {
             supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
                 .addToBackStack(null)
                 .commit()
+        })
+
+        mViewModel.goToHomeScreen.observe(this, Observer {
+            startHomeActivity()
+        })
+
+        mViewModel.goBackToEmailScreen.observe(this, Observer {
+            supportFragmentManager.popBackStack()
         })
 
         if (savedInstanceState == null) {
@@ -54,73 +49,11 @@ class RegisterActivity : BaseActivity(), EmailFragment.Listener, NamePassFragmen
 
     override fun onNext(email: String) = mViewModel.onEmailEntered(email)
 
-
-    override fun onRegister(fullName: String, password: String) {
-        mViewModel.onRegister(fullName, password)
-        if (fullName.isNotEmpty() && password.isNotEmpty()) {
-            val email = mEmail
-            if (email != null) {
-                mAuth.createUserWithEmailAndPassword(email, password) {
-                    mDatabase.createUser(it.user.uid, mkUser(fullName, email)) {
-                        startHomeActivity()
-                    }
-                }
-            } else {
-                Log.e(TAG, "onRegister: email is null")
-                showToast(getString(R.string.please_enter_your_email))
-                supportFragmentManager.popBackStack()
-            }
-        } else {
-            showToast(getString(R.string.please_enter_full_name_and_password))
-        }
-    }
-
-    private fun unknownRegisterError(it: Task<*>) {
-        Log.e(TAG, "failed to create currentUser profile", it.exception)
-        showToast(it.exception!!.message!!)
-    }
-
+    override fun onRegister(fullName: String, password: String) = mViewModel.onRegister(fullName, password)
 
     private fun startHomeActivity() {
         startActivity(Intent(this, HomeActivity::class.java))
         finish()
-    }
-
-
-    private fun DatabaseReference.createUser(uid: String, user: User, onSuccess: () -> Unit) {
-        val reference = child("users").child(uid)
-        reference.setValue(user).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess()
-            } else {
-                unknownRegisterError(it)
-            }
-        }
-    }
-
-    private fun FirebaseAuth.createUserWithEmailAndPassword(
-        email: String,
-        password: String,
-        onSuccess: (AuthResult) -> Unit
-    ) {
-        createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    onSuccess(it.result!!)
-                } else {
-                    showToast(it.exception!!.message!!)
-                }
-            }
-    }
-
-    private fun FirebaseAuth.fetchSignInMethodsForEmail(email: String, onSuccess: (List<String>) -> Unit) {
-        fetchSignInMethodsForEmail(email).addOnCompleteListener {
-            if (it.isSuccessful) {
-                onSuccess(it.result?.signInMethods ?: emptyList<String>())
-            } else {
-                showToast(it.exception!!.message!!)
-            }
-        }
     }
 }
 

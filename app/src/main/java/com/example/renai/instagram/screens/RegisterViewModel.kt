@@ -16,7 +16,11 @@ class RegisterViewModel(
 ) : ViewModel() {
     private var email: String? = null
     private val _goToNamePassScreen = SingleLiveEvent<Unit>()
+    private val _goToHomeScreen = SingleLiveEvent<Unit>()
+    private val _goBackToEmailScreen = SingleLiveEvent<Unit>()
     val goToNamePassScreen = _goToNamePassScreen
+    val goToHomeScreen = _goToHomeScreen
+    val goBackToEmailScreen = _goBackToEmailScreen
 
     fun onEmailEntered(email: String) {
         if (email.isNotEmpty()) {
@@ -37,21 +41,19 @@ class RegisterViewModel(
         if (fullName.isNotEmpty() && password.isNotEmpty()) {
             val localEmail = email
             if (localEmail != null) {
-                usersRepository.createUser(mkUser(fullName, localEmail), password)
-                mAuth.createUserWithEmailAndPassword(localEmail, password) {
-                    mDatabase.createUser(it.user.uid, mkUser(fullName, localEmail)) {
-                        startHomeActivity()
-                    }
+                usersRepository.createUser(mkUser(fullName, localEmail), password).addOnSuccessListener {
+                    _goToHomeScreen.call()
                 }
             } else {
                 Log.e(RegisterActivity.TAG, "onRegister: email is null")
-                showToast(getString(R.string.please_enter_your_email))
-                supportFragmentManager.popBackStack()
+                commonViewModel.setErrorMessage(app.getString(R.string.please_enter_your_email))
+                _goBackToEmailScreen.call()
             }
         } else {
-            showToast(getString(R.string.please_enter_full_name_and_password))
+            commonViewModel.setErrorMessage(app.getString(R.string.please_enter_full_name_and_password))
         }
     }
+
     private fun mkUser(fullName: String, email: String): User {
         val username = mkUsername(fullName)
         return User(name = fullName, username = username, email = email)
