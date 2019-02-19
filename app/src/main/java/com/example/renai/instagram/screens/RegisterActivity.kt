@@ -1,16 +1,17 @@
 package com.example.renai.instagram.screens
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
 import com.example.renai.instagram.screens.common.showToast
 import com.example.renai.instagram.screens.home.HomeActivity
@@ -22,13 +23,13 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_register_email.*
 import kotlinx.android.synthetic.main.fragment_register_namepass.*
 
-class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFragment.Listener {
+class RegisterActivity : BaseActivity(), EmailFragment.Listener, NamePassFragment.Listener {
     companion object {
         const val TAG = "RegisterActivity"
     }
 
     private var mEmail: String? = null
-
+    private lateinit var mViewModel: RegisterViewModel
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mDatabase: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,30 +39,24 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
         mAuth = FirebaseAuth.getInstance()
         mDatabase = FirebaseDatabase.getInstance().reference
 
+        mViewModel = initViewModel()
+        mViewModel.goToNamePassScreen.observe(this, Observer {
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
+                .addToBackStack(null)
+                .commit()
+        })
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().add(R.id.frame_layout, EmailFragment())
                 .commit()
         }
     }
 
-    override fun onNext(email: String) {
-        if (email.isNotEmpty()) {
-            mEmail = email
-            mAuth.fetchSignInMethodsForEmail(email) { signInMethods ->
-                if (signInMethods.isEmpty()) {
-                    supportFragmentManager.beginTransaction().replace(R.id.frame_layout, NamePassFragment())
-                        .addToBackStack(null)
-                        .commit()
-                } else {
-                    showToast(getString(R.string.this_email_is_already_exists))
-                }
-            }
-        } else {
-            showToast(getString(R.string.please_enter_your_email))
-        }
-    }
+    override fun onNext(email: String) = mViewModel.onEmailEntered(email)
+
 
     override fun onRegister(fullName: String, password: String) {
+        mViewModel.onRegister(fullName, password)
         if (fullName.isNotEmpty() && password.isNotEmpty()) {
             val email = mEmail
             if (email != null) {
@@ -91,13 +86,6 @@ class RegisterActivity : AppCompatActivity(), EmailFragment.Listener, NamePassFr
         finish()
     }
 
-    private fun mkUser(fullName: String, email: String): User {
-        val username = mkUsername(fullName)
-        return User(name = fullName, username = username, email = email)
-    }
-
-    private fun mkUsername(fullName: String) =
-        fullName.toLowerCase().replace(" ", ".")
 
     private fun DatabaseReference.createUser(uid: String, user: User, onSuccess: () -> Unit) {
         val reference = child("users").child(uid)

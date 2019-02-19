@@ -18,4 +18,6 @@ interface UsersRepository {
     fun addFollower(userUid: String, followUid: String): Task<Unit>
     fun removeFollower(userUid: String, followUid: String): Task<Unit>
     fun getImages(uid: String): LiveData<List<String>>
+    fun isUserExistsForEmail(email: String):Task<Boolean>
+    fun createUser(user: User, password: String)
 }

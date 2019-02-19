@@ -13,6 +13,17 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 
 class FirebaseUsersRepository : UsersRepository {
+    override fun createUser(user: User, password: String) {
+        auth.createUserWithEmailAndPassword(user.email, password)
+    }
+
+    override fun isUserExistsForEmail(email: String): Task<Boolean> =
+        auth.fetchSignInMethodsForEmail(email).onSuccessTask {
+            val signInMethods = it?.signInMethods ?: emptyList<String>()
+            Tasks.forResult(signInMethods.isNotEmpty())
+        }
+
+
     override fun getImages(uid: String): LiveData<List<String>> {
         return FirebaseLiveData(database.child("images").child(uid)).map {
             it.children.map { it.getValue(String::class.java)!! }.sortedDescending()
