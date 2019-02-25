@@ -2,10 +2,12 @@ package com.example.renai.instagram.data.firebase
 
 import android.arch.lifecycle.LiveData
 import android.net.Uri
+import com.example.renai.instagram.common.task
 import com.example.renai.instagram.common.toUnit
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.map
 import com.example.renai.instagram.data.firebase.common.*
+import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -13,6 +15,30 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 
 class FirebaseUsersRepository : UsersRepository {
+    override fun createFeedPost(uid: String, feedPost: FeedPost): Task<Unit> =
+        database.child("feed-posts").child(uid)
+            .push().setValue(feedPost).toUnit()
+
+
+    override fun setUserImage(uid: String, imageDownloadUri: Uri): Task<Unit> {
+        return database.child("images").child(uid)
+            .push().setValue(imageDownloadUri.toString()).toUnit()
+    }
+
+    override fun uploadUserImage(uid: String, imageUri: Uri): Task<Uri> =
+        task {
+            storage.child("users").child(uid).child(imageUri.lastPathSegment!!)
+                .putFile(imageUri).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        storage.child("users").child(uid)
+                            .child(imageUri.lastPathSegment!!).downloadUrl
+                    } else {
+                        it.exception!!.message
+                    }
+                }
+        }
+
+
     override fun createUser(user: User, password: String): Task<Unit> =
         auth.createUserWithEmailAndPassword(user.email, password).onSuccessTask {
             database.child("users").child(it!!.user.uid).setValue(user)

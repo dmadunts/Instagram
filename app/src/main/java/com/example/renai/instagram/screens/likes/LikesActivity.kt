@@ -1,4 +1,4 @@
-package com.example.renai.instagram.screens
+package com.example.renai.instagram.screens.likes
 
 import android.os.Bundle
 import android.util.Log

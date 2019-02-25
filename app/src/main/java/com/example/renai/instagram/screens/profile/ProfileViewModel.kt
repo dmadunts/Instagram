@@ -1,4 +1,4 @@
-package com.example.renai.instagram.screens
+package com.example.renai.instagram.screens.profile
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel

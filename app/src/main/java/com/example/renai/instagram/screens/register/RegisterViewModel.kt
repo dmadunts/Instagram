@@ -1,4 +1,4 @@
-package com.example.renai.instagram.screens
+package com.example.renai.instagram.screens.register
 
 import android.app.Application
 import android.arch.lifecycle.ViewModel
@@ -61,6 +61,5 @@ class RegisterViewModel(
 
     private fun mkUsername(fullName: String) =
         fullName.toLowerCase().replace(" ", ".")
-
 }
 

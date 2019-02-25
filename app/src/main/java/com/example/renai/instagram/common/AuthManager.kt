@@ -5,5 +5,5 @@ import com.google.firebase.auth.AuthResult
 
 interface AuthManager{
     fun signOut()
-    fun signIn(email: String, password: String): Task<AuthResult>
+    fun signIn(email: String, password: String): Task<Unit>
 }

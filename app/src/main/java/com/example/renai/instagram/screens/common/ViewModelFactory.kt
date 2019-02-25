@@ -6,7 +6,10 @@ import android.arch.lifecycle.ViewModelProvider
 import com.example.renai.instagram.common.firebase.FirebaseAuthManager
 import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
-import com.example.renai.instagram.screens.LoginViewModel
+import com.example.renai.instagram.screens.login.LoginViewModel
+import com.example.renai.instagram.screens.profile.ProfileViewModel
+import com.example.renai.instagram.screens.register.RegisterViewModel
+import com.example.renai.instagram.screens.share.ShareViewModel
 import com.example.renai.instagram.screens.addfriends.AddFriendsViewModel
 import com.example.renai.instagram.screens.editprofile.EditProfileViewModel
 import com.example.renai.instagram.screens.home.HomeViewModel
@@ -32,12 +35,33 @@ class ViewModelFactory(
                 ) as T
             modelClass.isAssignableFrom(EditProfileViewModel::class.java) ->
                 return EditProfileViewModel(onFailureListener, usersRepository) as T
+
             modelClass.isAssignableFrom(HomeViewModel::class.java) ->
                 return HomeViewModel(onFailureListener, feedPostsRepository) as T
+
             modelClass.isAssignableFrom(ProfileSettingsViewModel::class.java) ->
                 return ProfileSettingsViewModel(authManager) as T
+
             modelClass.isAssignableFrom(LoginViewModel::class.java) ->
-                return LoginViewModel(authManager, app, commonViewModel, onFailureListener) as T
+                return LoginViewModel(
+                    authManager,
+                    app,
+                    commonViewModel,
+                    onFailureListener
+                ) as T
+
+            modelClass.isAssignableFrom(RegisterViewModel::class.java) ->
+                return RegisterViewModel(
+                    usersRepository,
+                    commonViewModel,
+                    app
+                ) as T
+
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) ->
+                return ProfileViewModel(usersRepository) as T
+
+            modelClass.isAssignableFrom(ShareViewModel::class.java) ->
+                return ShareViewModel(usersRepository, onFailureListener) as T
 
             else -> error("Unknown viewmodel class: $modelClass")
         }

@@ -1,4 +1,4 @@
-package com.example.renai.instagram.screens
+package com.example.renai.instagram.screens.login
 
 import android.arch.lifecycle.Observer
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.renai.instagram.R
+import com.example.renai.instagram.screens.register.RegisterActivity
 import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
 import com.example.renai.instagram.screens.common.setupAuthGuard

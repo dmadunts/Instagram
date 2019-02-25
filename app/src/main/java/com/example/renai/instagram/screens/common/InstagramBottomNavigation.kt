@@ -7,8 +7,11 @@ import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Intent
 import android.util.Log
 import com.example.renai.instagram.R
-import com.example.renai.instagram.screens.*
 import com.example.renai.instagram.screens.home.HomeActivity
+import com.example.renai.instagram.screens.likes.LikesActivity
+import com.example.renai.instagram.screens.profile.ProfileActivity
+import com.example.renai.instagram.screens.search.SearchActivity
+import com.example.renai.instagram.screens.share.ShareActivity
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
 import kotlinx.android.synthetic.main.bottom_navigation_view.*
 
