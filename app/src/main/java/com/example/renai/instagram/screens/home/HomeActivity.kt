@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.example.renai.instagram.R
+import com.example.renai.instagram.screens.comments.CommentsActivity
 import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.setupAuthGuard
 import com.example.renai.instagram.screens.common.setupBottomNavigation
@@ -34,6 +35,11 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
                     mAdapter.updatePosts(it)
                 }
             })
+            mViewModel.goToCommentsScreen.observe(this, Observer {
+                it?.let { postId ->
+                    CommentsActivity.start(this, postId)
+                }
+            })
         }
     }
 
@@ -49,6 +55,10 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
                 }
             })
         }
+    }
+
+    override fun openComments(postId: String) {
+        mViewModel.openComments(postId)
     }
 }
 

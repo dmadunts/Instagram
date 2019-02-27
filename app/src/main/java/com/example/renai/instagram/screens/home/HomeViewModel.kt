@@ -2,11 +2,10 @@ package com.example.renai.instagram.screens.home
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import com.example.renai.instagram.common.SingleLiveEvent
 import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.common.map
-import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.FeedPost
-import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.OnFailureListener
 
 class HomeViewModel(
@@ -16,6 +15,8 @@ class HomeViewModel(
     lateinit var uid: String
     lateinit var feedPosts: LiveData<List<FeedPost>>
     private var loadedLikes = mapOf<String, LiveData<FeedPostLikes>>()
+    private val _goToCommentsScreen = SingleLiveEvent<String>()
+    val goToCommentsScreen = _goToCommentsScreen
 
     fun init(uid: String) {
         this.uid = uid
@@ -43,5 +44,10 @@ class HomeViewModel(
         } else {
             return existingLoadedLikes
         }
+    }
+
+
+    fun openComments(postId: String) {
+        _goToCommentsScreen.value = postId
     }
 }

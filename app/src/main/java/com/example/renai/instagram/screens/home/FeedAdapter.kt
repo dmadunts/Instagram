@@ -27,6 +27,7 @@ class FeedAdapter(private var listener: Listener) :
     interface Listener {
         fun toggleLike(postId: String)
         fun loadLikes(postId: String, position: Int)
+        fun openComments(postId: String)
     }
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -73,6 +74,7 @@ class FeedAdapter(private var listener: Listener) :
                 if (likes.likedByUser) R.drawable.ic_likes_active
                 else R.drawable.ic_likes_border
             )
+            comment_image.setOnClickListener { listener.openComments(post.id) }
             listener.loadLikes(post.id, position)
         }
     }

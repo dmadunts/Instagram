@@ -5,6 +5,8 @@
                                              android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/toolbar"
             style="@style/toolbar"
             app:contentInsetStart="0dp">

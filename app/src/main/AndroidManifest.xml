@@ -33,7 +33,7 @@
                 android:name=".screens.register.RegisterActivity"
                 android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
-
+        <activity android:name=".screens.comments.CommentsActivity"/>
         <provider
                 android:name="android.support.v4.content.FileProvider"
                 android:authorities="com.example.renai.instagram.fileprovider"
