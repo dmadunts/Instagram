@@ -1,8 +1,8 @@
 package com.example.renai.instagram.data
 
 import android.arch.lifecycle.LiveData
+import com.example.renai.instagram.models.Comment
 import com.example.renai.instagram.models.FeedPost
-import com.example.renai.instagram.screens.home.FeedPostLikes
 import com.google.android.gms.tasks.Task
 
 interface FeedPostsRepository {
@@ -11,6 +11,8 @@ interface FeedPostsRepository {
     fun getFeedPosts(uid: String): LiveData<List<FeedPost>>
     fun toggleLike(postId: String, uid: String): Task<Unit>
     fun getLikes(postId: String): LiveData<List<FeedPostLike>>
+    fun getComments(postId: String): LiveData<List<Comment>>
+    fun createComment(postId: String, comment: Comment): Task<Unit>
 }
 
 data class FeedPostLike(val userId: String?)

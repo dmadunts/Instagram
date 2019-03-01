@@ -6,14 +6,15 @@ import android.arch.lifecycle.ViewModelProvider
 import com.example.renai.instagram.common.firebase.FirebaseAuthManager
 import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
-import com.example.renai.instagram.screens.login.LoginViewModel
-import com.example.renai.instagram.screens.profile.ProfileViewModel
-import com.example.renai.instagram.screens.register.RegisterViewModel
-import com.example.renai.instagram.screens.share.ShareViewModel
 import com.example.renai.instagram.screens.addfriends.AddFriendsViewModel
+import com.example.renai.instagram.screens.comments.CommentsViewModel
 import com.example.renai.instagram.screens.editprofile.EditProfileViewModel
 import com.example.renai.instagram.screens.home.HomeViewModel
+import com.example.renai.instagram.screens.login.LoginViewModel
+import com.example.renai.instagram.screens.profile.ProfileViewModel
 import com.example.renai.instagram.screens.profilesettings.ProfileSettingsViewModel
+import com.example.renai.instagram.screens.register.RegisterViewModel
+import com.example.renai.instagram.screens.share.ShareViewModel
 import com.google.android.gms.tasks.OnFailureListener
 
 @Suppress("UNCHECKED_CAST")
@@ -26,6 +27,7 @@ class ViewModelFactory(
         val usersRepository by lazy { FirebaseUsersRepository() }
         val feedPostsRepository by lazy { FirebaseFeedPostsRepository() }
         val authManager by lazy { FirebaseAuthManager() }
+
         when {
             modelClass.isAssignableFrom(AddFriendsViewModel::class.java) ->
                 return AddFriendsViewModel(
@@ -62,6 +64,9 @@ class ViewModelFactory(
 
             modelClass.isAssignableFrom(ShareViewModel::class.java) ->
                 return ShareViewModel(usersRepository, onFailureListener) as T
+
+            modelClass.isAssignableFrom(CommentsViewModel::class.java) ->
+                return CommentsViewModel(feedPostsRepository, onFailureListener, usersRepository) as T
 
             else -> error("Unknown viewmodel class: $modelClass")
         }

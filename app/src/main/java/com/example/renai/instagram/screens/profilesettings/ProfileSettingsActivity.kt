@@ -2,13 +2,11 @@ package com.example.renai.instagram.screens.profilesettings
 
 import android.os.Bundle
 import com.example.renai.instagram.R
-import com.example.renai.instagram.data.firebase.common.FirebaseHelper
 import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.setupAuthGuard
 import kotlinx.android.synthetic.main.activity_profile_settings.*
 
 class ProfileSettingsActivity : BaseActivity() {
-    private lateinit var mFirebase: FirebaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,7 +14,6 @@ class ProfileSettingsActivity : BaseActivity() {
 
         setupAuthGuard {
             val viewModel = initViewModel<ProfileSettingsViewModel>()
-            mFirebase = FirebaseHelper(this)
             sign_out_text.setOnClickListener { viewModel.signOut() }
             back_image.setOnClickListener { finish() }
         }

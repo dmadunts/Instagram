@@ -1,25 +1,16 @@
 package com.example.renai.instagram.screens.home
 
-import android.graphics.Typeface
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.TextPaint
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.SimpleCallback
 import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.screens.common.loadImage
 import com.example.renai.instagram.screens.common.loadUserPhoto
-import com.example.renai.instagram.screens.common.showToast
+import com.example.renai.instagram.screens.common.setCaptionText
 import kotlinx.android.synthetic.main.feed_item.view.*
 
 class FeedAdapter(private var listener: Listener) :
@@ -77,22 +68,6 @@ class FeedAdapter(private var listener: Listener) :
             comment_image.setOnClickListener { listener.openComments(post.id) }
             listener.loadLikes(post.id, position)
         }
-    }
-
-    private fun TextView.setCaptionText(username: String, caption: String) {
-        val usernameSpannable = SpannableString(username)
-        usernameSpannable.setSpan(
-            StyleSpan(Typeface.BOLD), 0, usernameSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        usernameSpannable.setSpan(object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                widget.context.showToast(context.getString(R.string.username_is_clicked))
-            }
-
-            override fun updateDrawState(ds: TextPaint) {}
-        }, 0, usernameSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
-        caption_text.movementMethod = LinkMovementMethod.getInstance()
     }
 
     fun updatePosts(newPosts: List<FeedPost>) {

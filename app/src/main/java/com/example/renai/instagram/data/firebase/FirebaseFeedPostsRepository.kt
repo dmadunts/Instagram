@@ -8,10 +8,8 @@ import com.example.renai.instagram.common.toUnit
 import com.example.renai.instagram.data.FeedPostLike
 import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.common.map
-import com.example.renai.instagram.data.firebase.common.FirebaseLiveData
-import com.example.renai.instagram.data.firebase.common.asFeedPost
-import com.example.renai.instagram.data.firebase.common.database
-import com.example.renai.instagram.data.firebase.common.setValueTrueOrRemove
+import com.example.renai.instagram.data.firebase.common.*
+import com.example.renai.instagram.models.Comment
 import com.example.renai.instagram.models.FeedPost
 import com.google.android.gms.tasks.Task
 
@@ -76,4 +74,12 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
                         )
                 })
         }
+
+    override fun getComments(postId: String): LiveData<List<Comment>> =
+        FirebaseLiveData(database.child("comments").child(postId)).map {
+            it.children.map { it.asComment()!! }
+        }
+
+    override fun createComment(postId: String, comment: Comment): Task<Unit> =
+        database.child("comments").child(postId).push().setValue(comment).toUnit()
 }

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.example.renai.instagram.screens.login.LoginActivity
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -25,6 +26,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 showToast(it)
             }
         })
+        Log.d("BaseActivity", "onCreate")
     }
 
     protected inline fun <reified T : ViewModel?> initViewModel(): T =
@@ -39,5 +41,6 @@ abstract class BaseActivity : AppCompatActivity() {
     fun goToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+        Log.d("BaseActivity", "goToLogin")
     }
 }

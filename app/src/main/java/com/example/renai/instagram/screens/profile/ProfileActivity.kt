@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.addfriends.AddFriendsActivity
-import com.example.renai.instagram.screens.common.*
+import com.example.renai.instagram.screens.common.BaseActivity
+import com.example.renai.instagram.screens.common.loadUserPhoto
+import com.example.renai.instagram.screens.common.setupAuthGuard
+import com.example.renai.instagram.screens.common.setupBottomNavigation
 import com.example.renai.instagram.screens.editprofile.EditProfileActivity
 import com.example.renai.instagram.screens.profilesettings.ProfileSettingsActivity
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -17,6 +20,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     private lateinit var mAdapter: ImagesAdapter
+    private lateinit var mViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +39,20 @@ class ProfileActivity : BaseActivity() {
             val intent = Intent(this, AddFriendsActivity::class.java)
             startActivity(intent)
         }
+
         images_recycler.layoutManager = GridLayoutManager(this, 3)
         mAdapter = ImagesAdapter()
         images_recycler.adapter = mAdapter
 
+        setupAuthGuard { uid ->
+            mViewModel = initViewModel()
+            mViewModel.init(uid)
+            mViewModel.images.observe(this, Observer {
+                it?.let {
+                    mAdapter.updateImages(it)
+                }
+            })
+        }
 
         setupAuthGuard { uid ->
             val viewModel = initViewModel<ProfileViewModel>()
@@ -56,7 +70,6 @@ class ProfileActivity : BaseActivity() {
             })
         }
     }
-
 }
 
 

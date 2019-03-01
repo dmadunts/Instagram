@@ -2,14 +2,15 @@ package com.example.renai.instagram.screens.common
 
 import android.app.Activity
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
+import android.graphics.Typeface
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import com.example.renai.instagram.R
+import kotlinx.android.synthetic.main.feed_item.view.*
 
 
 fun Context.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
@@ -31,6 +32,22 @@ fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
 
     inputs.forEach { it.addTextChangedListener(watcher) }
     btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+}
+
+fun TextView.setCaptionText(username: String, caption: String) {
+    val usernameSpannable = SpannableString(username)
+    usernameSpannable.setSpan(
+        StyleSpan(Typeface.BOLD), 0, usernameSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    usernameSpannable.setSpan(object : ClickableSpan() {
+        override fun onClick(widget: View) {
+            widget.context.showToast(context.getString(R.string.username_is_clicked))
+        }
+
+        override fun updateDrawState(ds: TextPaint) {}
+    }, 0, usernameSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
+    caption_text.movementMethod = LinkMovementMethod.getInstance()
 }
 
 fun ImageView.loadImage(image: String?) =
