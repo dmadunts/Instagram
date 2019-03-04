@@ -12,7 +12,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)
-fun DataSnapshot.asComment(): Comment? = getValue(Comment::class.java)?.copy(uid = key!!)
+fun DataSnapshot.asComment(): Comment? = getValue(Comment::class.java)?.copy(id = key!!)
 fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)?.copy(id = key!!)
 fun DatabaseReference.setValueTrueOrRemove(value: Boolean) = if (value) setValue(true) else removeValue()
 val auth: FirebaseAuth = FirebaseAuth.getInstance()

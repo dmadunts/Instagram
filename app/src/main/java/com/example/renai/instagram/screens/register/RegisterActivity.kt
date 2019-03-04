@@ -21,7 +21,6 @@ class RegisterActivity : BaseActivity(), EmailFragment.Listener,
         Log.d(TAG, "onCreate")
 
         mViewModel = initViewModel()
-        Log.d(TAG, "onCreate: initViewModel")
         mViewModel.goToNamePassScreen.observe(this, Observer {
             supportFragmentManager.beginTransaction().replace(
                 R.id.frame_layout,
@@ -30,24 +29,19 @@ class RegisterActivity : BaseActivity(), EmailFragment.Listener,
                 .addToBackStack(null)
                 .commit()
         })
-        Log.d(TAG, "onCreate: goToNamePass")
 
         mViewModel.goToHomeScreen.observe(this, Observer {
             startHomeActivity()
         })
-        Log.d(TAG, "onCreate: goToHomeScreen")
 
         mViewModel.goBackToEmailScreen.observe(this, Observer {
             supportFragmentManager.popBackStack()
         })
-        Log.d(TAG, "onCreate: goToBackToEmailScreen")
-
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().add(R.id.frame_layout, EmailFragment())
                 .commit()
         }
-        Log.d(TAG, "onCreate: the end")
 
     }
 

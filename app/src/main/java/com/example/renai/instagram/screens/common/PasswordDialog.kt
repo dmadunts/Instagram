@@ -27,9 +27,7 @@ class PasswordDialog : DialogFragment() {
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 mListener.onPasswordConfirm(view.password_input.text.toString())
             }
-            .setNegativeButton(android.R.string.cancel, { _, _ ->
-                //do nothing
-            })
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .create()
     }
 }

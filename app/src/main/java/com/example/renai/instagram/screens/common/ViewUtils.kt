@@ -8,16 +8,18 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import com.example.renai.instagram.R
-import kotlinx.android.synthetic.main.feed_item.view.*
 
 
 fun Context.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
     text?.let { Toast.makeText(this, it, duration).show() }
 }
 
-fun coordinateBtnAndInputs(btn: Button, vararg inputs: EditText) {
+fun coordinateBtnAndInputs(btn: View, vararg inputs: EditText) {
     val watcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             btn.isEnabled = inputs.all { it.text.isNotEmpty() }
@@ -46,8 +48,8 @@ fun TextView.setCaptionText(username: String, caption: String) {
 
         override fun updateDrawState(ds: TextPaint) {}
     }, 0, usernameSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-    caption_text.text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
-    caption_text.movementMethod = LinkMovementMethod.getInstance()
+    text = SpannableStringBuilder().append(usernameSpannable).append(" ").append(caption)
+    movementMethod = LinkMovementMethod.getInstance()
 }
 
 fun ImageView.loadImage(image: String?) =

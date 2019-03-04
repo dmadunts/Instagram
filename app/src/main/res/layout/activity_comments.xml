@@ -57,6 +57,7 @@
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/top_border_grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +65,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 style="@style/icon"
-                tools:src="@drawable/person"
+                android:src="@drawable/person"
                 />
 
         <EditText
@@ -74,6 +75,7 @@
                 android:layout_weight="1"
                 android:hint="@string/add_a_comment"
                 android:inputType="text"
+                android:background="@android:color/transparent"
                 />
 
         <TextView

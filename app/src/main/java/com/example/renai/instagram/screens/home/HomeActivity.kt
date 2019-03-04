@@ -35,6 +35,7 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
                     mAdapter.updatePosts(it)
                 }
             })
+
             mViewModel.goToCommentsScreen.observe(this, Observer {
                 it?.let { postId ->
                     CommentsActivity.start(this, postId)

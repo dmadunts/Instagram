@@ -14,6 +14,7 @@ import com.example.renai.instagram.models.FeedPost
 import com.google.android.gms.tasks.Task
 
 class FirebaseFeedPostsRepository : FeedPostsRepository {
+
     override fun getLikes(postId: String): LiveData<List<FeedPostLike>> =
         FirebaseLiveData(database.child("likes").child(postId)).map {
             it.children.map { FeedPostLike(it.key) }

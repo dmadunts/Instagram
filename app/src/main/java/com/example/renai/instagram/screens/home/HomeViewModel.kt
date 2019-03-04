@@ -25,6 +25,7 @@ class HomeViewModel(
         }
     }
 
+
     fun toggleLike(postId: String) {
         feedPostsRepository.toggleLike(postId, uid).addOnFailureListener(onFailureListener)
     }
@@ -45,7 +46,6 @@ class HomeViewModel(
             return existingLoadedLikes
         }
     }
-
 
     fun openComments(postId: String) {
         _goToCommentsScreen.value = postId

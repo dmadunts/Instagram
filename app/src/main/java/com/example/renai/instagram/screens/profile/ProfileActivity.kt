@@ -47,25 +47,17 @@ class ProfileActivity : BaseActivity() {
         setupAuthGuard { uid ->
             mViewModel = initViewModel()
             mViewModel.init(uid)
-            mViewModel.images.observe(this, Observer {
-                it?.let {
-                    mAdapter.updateImages(it)
-                }
-            })
-        }
 
-        setupAuthGuard { uid ->
-            val viewModel = initViewModel<ProfileViewModel>()
-            viewModel.init(uid)
-            viewModel.user.observe(this, Observer {
+            mViewModel.user.observe(this, Observer {
                 it?.let { user ->
                     username_text.text = user.username
                     profile_picture.loadUserPhoto(user.photo)
                 }
             })
-            viewModel.images.observe(this, Observer {
-                it?.let { images ->
-                    mAdapter.updateImages(images)
+
+            mViewModel.images.observe(this, Observer {
+                it?.let {
+                    mAdapter.updateImages(it)
                 }
             })
         }

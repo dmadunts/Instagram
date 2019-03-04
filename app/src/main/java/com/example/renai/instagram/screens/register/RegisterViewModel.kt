@@ -23,7 +23,7 @@ class RegisterViewModel(
     val goBackToEmailScreen = _goBackToEmailScreen
 
     fun onEmailEntered(email: String) {
-        if (email.isNotEmpty()) {
+        if (email.isNotEmpty() && email.isNotBlank()) {
             this.email = email
             usersRepository.isUserExistsForEmail(email).addOnSuccessListener { exists ->
                 if (!exists) {

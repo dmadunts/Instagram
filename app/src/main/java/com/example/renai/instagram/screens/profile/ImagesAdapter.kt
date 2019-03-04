@@ -21,6 +21,7 @@ class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ViewHolder>() {
                 newImages,
                 { it })
         )
+        this.images = newImages
         diffResult.dispatchUpdatesTo(this)
     }
 

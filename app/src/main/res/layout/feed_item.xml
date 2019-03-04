@@ -37,8 +37,10 @@
 
     <ImageView
             android:id="@+id/post_image"
-            android:layout_width="1080px"
-            android:layout_height="1080px"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:minWidth="1080px"
+            android:minHeight="1080px"
             android:src="@drawable/placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
