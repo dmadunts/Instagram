@@ -83,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/post"
+                android:stateListAnimator="@animator/btn_animator"
                 android:textColor="@color/blue"
                 android:gravity="center_vertical"
                 android:paddingEnd="10dp"

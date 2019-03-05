@@ -29,12 +29,12 @@ class CommentsActivity : BaseActivity() {
         coordinateBtnAndInputs(post_comment_btn, comment_text)
         back_image.setOnClickListener { finish() }
 
+
+        coordinateBtnAndInputs(post_comment_btn, comment_text)
         post_comment_btn.setOnClickListener {
             val commentText = comment_text.text.toString()
-            if (commentText.isNotEmpty()) {
-                mViewModel.createComment(commentText, mUser)
-                comment_text.setText("")
-            }
+            mViewModel.createComment(commentText, mUser)
+            comment_text.setText("")
         }
 
         setupAuthGuard {

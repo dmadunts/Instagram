@@ -22,7 +22,7 @@ fun Context.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
 fun coordinateBtnAndInputs(btn: View, vararg inputs: EditText) {
     val watcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            btn.isEnabled = inputs.all { it.text.isNotEmpty() }
+            btn.isEnabled = inputs.all { it.text.isNotEmpty() and it.text.isNotBlank() }
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
