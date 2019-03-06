@@ -1,18 +1,18 @@
 package com.example.renai.instagram.screens.comments
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.Comment
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.screens.common.BaseViewModel
 import com.google.android.gms.tasks.OnFailureListener
 
 class CommentsViewModel(
     private val feedPostsRepository: FirebaseFeedPostsRepository,
-    private val onFailureListener: OnFailureListener,
-    private val usersRepository: FirebaseUsersRepository
-) : ViewModel() {
+    onFailureListener: OnFailureListener,
+    usersRepository: FirebaseUsersRepository
+) : BaseViewModel(onFailureListener) {
 
     lateinit var comments: LiveData<List<Comment>>
     private lateinit var postId: String

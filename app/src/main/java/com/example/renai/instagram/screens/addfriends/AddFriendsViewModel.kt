@@ -1,20 +1,20 @@
 package com.example.renai.instagram.screens.addfriends
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.map
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.screens.common.BaseViewModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 
 class AddFriendsViewModel(
-    private val onFailureListener: OnFailureListener,
+    onFailureListener: OnFailureListener,
     private val usersRepository: UsersRepository,
     private val feedPostsRepository: FeedPostsRepository
-) : ViewModel() {
+) : BaseViewModel(onFailureListener) {
     private val currentUid = usersRepository.currentUid()!!
 
     val usersAndFriends: LiveData<Pair<User, List<User>>> =

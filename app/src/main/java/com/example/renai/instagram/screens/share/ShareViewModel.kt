@@ -1,18 +1,20 @@
 package com.example.renai.instagram.screens.share
 
-import android.arch.lifecycle.ViewModel
 import android.net.Uri
 import android.util.Log
+import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.FeedPost
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.screens.common.BaseViewModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Tasks
 
 class ShareViewModel(
     private val usersRepository: FirebaseUsersRepository,
-    private val onFailureListener: OnFailureListener
-) : ViewModel() {
+    private val feedPostsRepository: FirebaseFeedPostsRepository,
+    onFailureListener: OnFailureListener
+) : BaseViewModel(onFailureListener) {
     val user = usersRepository.getUser()
 
     fun share(user: User, caption: String, imageUri: Uri?) {
@@ -20,7 +22,7 @@ class ShareViewModel(
             usersRepository.uploadUserImage(user.uid, imageUri).onSuccessTask { downloadUrl ->
                 Tasks.whenAll(
                     usersRepository.setUserImage(user.uid, downloadUrl!!),
-                    usersRepository.createFeedPost(
+                    feedPostsRepository.createFeedPost(
                         user.uid,
                         makeFeedPost(user, caption, downloadUrl.toString())
                     )

@@ -1,10 +1,12 @@
 package com.example.renai.instagram.screens.profile
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
+import com.example.renai.instagram.screens.common.BaseViewModel
+import com.google.android.gms.tasks.OnFailureListener
 
-class ProfileViewModel(private val usersRepository: FirebaseUsersRepository) : ViewModel() {
+class ProfileViewModel(private val usersRepository: FirebaseUsersRepository, onFailureListener: OnFailureListener) :
+    BaseViewModel(onFailureListener) {
     val user = usersRepository.getUser()
     lateinit var images: LiveData<List<String>>
 

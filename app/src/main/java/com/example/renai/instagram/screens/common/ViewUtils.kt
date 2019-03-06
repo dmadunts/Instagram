@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.renai.instagram.R
+import java.util.*
 
 
 fun Context.showToast(text: String?, duration: Int = Toast.LENGTH_SHORT) {
@@ -36,7 +37,7 @@ fun coordinateBtnAndInputs(btn: View, vararg inputs: EditText) {
     btn.isEnabled = inputs.all { it.text.isNotEmpty() }
 }
 
-fun TextView.setCaptionText(username: String, caption: String) {
+fun TextView.setCaptionText(username: String, caption: String, date: Date? = null) {
     val usernameSpannable = SpannableString(username)
     usernameSpannable.setSpan(
         StyleSpan(Typeface.BOLD), 0, usernameSpannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

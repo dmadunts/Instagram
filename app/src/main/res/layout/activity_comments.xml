@@ -65,7 +65,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 style="@style/icon"
+                android:padding="6dp"
                 android:src="@drawable/person"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/grey"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 />
 
         <EditText
@@ -73,6 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:textSize="14sp"
                 android:hint="@string/add_a_comment"
                 android:inputType="text"
                 android:background="@android:color/transparent"

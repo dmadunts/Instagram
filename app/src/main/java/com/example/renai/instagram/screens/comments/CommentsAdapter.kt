@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.SimpleCallback
+import com.example.renai.instagram.common.formatRelativeTimestamp
 import com.example.renai.instagram.models.Comment
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setCaptionText
 import kotlinx.android.synthetic.main.comments_item.view.*
+import java.util.*
 
 class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
     private var comments = listOf<Comment>()
@@ -25,6 +27,7 @@ class CommentsAdapter : RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
         with(holder.view) {
             photo.loadUserPhoto(comment.photo)
             text.setCaptionText(comment.username, comment.text)
+            date.text = formatRelativeTimestamp(comment.timestampDate(), Date())
         }
     }
 

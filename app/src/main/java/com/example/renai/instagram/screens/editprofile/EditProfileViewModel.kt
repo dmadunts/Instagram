@@ -1,17 +1,17 @@
 package com.example.renai.instagram.screens.editprofile
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import android.net.Uri
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.models.User
+import com.example.renai.instagram.screens.common.BaseViewModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
 
 class EditProfileViewModel(
-    private val onFailureListener: OnFailureListener,
+    onFailureListener: OnFailureListener,
     private val usersRepository: UsersRepository
-) : ViewModel() {
+) : BaseViewModel(onFailureListener) {
     val user: LiveData<User> = usersRepository.getUser()
 
     fun uploadAndSetPhoto(localImage: Uri): Task<Unit> =

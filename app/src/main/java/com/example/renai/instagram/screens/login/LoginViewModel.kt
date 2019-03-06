@@ -2,10 +2,10 @@ package com.example.renai.instagram.screens.login
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.AuthManager
 import com.example.renai.instagram.common.SingleLiveEvent
+import com.example.renai.instagram.screens.common.BaseViewModel
 import com.example.renai.instagram.screens.common.CommonViewModel
 import com.google.android.gms.tasks.OnFailureListener
 
@@ -13,8 +13,8 @@ class LoginViewModel(
     private val authManager: AuthManager,
     private val app: Application,
     private val commonViewModel: CommonViewModel,
-    private val onFailureListener: OnFailureListener
-) : ViewModel() {
+    onFailureListener: OnFailureListener
+) : BaseViewModel(onFailureListener) {
     private val _goToHomeScreen = SingleLiveEvent<Unit>()
     val goToHomeScreen: LiveData<Unit> = _goToHomeScreen
 
