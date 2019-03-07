@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+        >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_photo"
+            style="@style/icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/person"/>
+
+    <TextView
+            android:id="@+id/notification_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            tools:text="@string/placeholder_text"
+            app:layout_constraintTop_toTopOf="@id/user_photo"
+            app:layout_constraintStart_toEndOf="@id/user_photo"
+            app:layout_constraintEnd_toStartOf="@id/post_image"
+            />
+
+    <ImageView
+            android:id="@+id/post_image"
+            tools:src="@drawable/placeholder"
+            style="@style/icon"
+            app:layout_constraintTop_toTopOf="@id/user_photo"
+            app:layout_constraintStart_toEndOf="@id/notification_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+</android.support.constraint.ConstraintLayout>

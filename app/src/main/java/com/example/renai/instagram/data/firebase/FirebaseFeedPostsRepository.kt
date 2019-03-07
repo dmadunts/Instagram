@@ -8,10 +8,13 @@ import com.example.renai.instagram.common.toUnit
 import com.example.renai.instagram.data.FeedPostLike
 import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.common.map
-import com.example.renai.instagram.data.firebase.common.*
+import com.example.renai.instagram.data.firebase.common.FirebaseLiveData
+import com.example.renai.instagram.data.firebase.common.database
 import com.example.renai.instagram.models.Comment
 import com.example.renai.instagram.models.FeedPost
 import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
 
 class FirebaseFeedPostsRepository : FeedPostsRepository {
     override fun createFeedPost(uid: String, feedPost: FeedPost): Task<Unit> =
@@ -86,4 +89,9 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
 
     override fun createComment(postId: String, comment: Comment): Task<Unit> =
         database.child("comments").child(postId).push().setValue(comment).toUnit()
+
+    private fun DataSnapshot.asComment(): Comment? = getValue(Comment::class.java)?.copy(id = key!!)
+    private fun DataSnapshot.asFeedPost(): FeedPost? = getValue(FeedPost::class.java)?.copy(id = key!!)
+    private fun DatabaseReference.setValueTrueOrRemove(value: Boolean) = if (value) setValue(true) else removeValue()
+
 }

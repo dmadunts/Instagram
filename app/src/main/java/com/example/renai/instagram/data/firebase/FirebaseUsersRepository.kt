@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
 
 class FirebaseUsersRepository : UsersRepository {
     override fun setUserImage(uid: String, imageDownloadUri: Uri): Task<Unit> {
@@ -45,7 +46,7 @@ class FirebaseUsersRepository : UsersRepository {
     }
 
     override fun getUsers(): LiveData<List<User>> =
-        database.child("users").liveData().map {
+        FirebaseLiveData(database.child("users")).map {
             it.children.map { it.asUser()!! }
         }
 
@@ -109,4 +110,6 @@ class FirebaseUsersRepository : UsersRepository {
         FirebaseLiveData(database.child("users").child(currentUid()!!)).map {
             it.asUser()!!
         }
+
+    private fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)
 }

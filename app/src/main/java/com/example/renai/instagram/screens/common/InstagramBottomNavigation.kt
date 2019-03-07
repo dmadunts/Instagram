@@ -8,7 +8,7 @@ import android.content.Intent
 import android.util.Log
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.home.HomeActivity
-import com.example.renai.instagram.screens.likes.LikesActivity
+import com.example.renai.instagram.screens.notifications.NotificationsActivity
 import com.example.renai.instagram.screens.profile.ProfileActivity
 import com.example.renai.instagram.screens.search.SearchActivity
 import com.example.renai.instagram.screens.share.ShareActivity
@@ -39,7 +39,7 @@ class InstagramBottomNavigation(
             val nextActivity =
                 when (it.itemId) {
                     R.id.nav_item_home -> HomeActivity::class.java
-                    R.id.nav_item_likes -> LikesActivity::class.java
+                    R.id.nav_item_likes -> NotificationsActivity::class.java
                     R.id.nav_item_profile -> ProfileActivity::class.java
                     R.id.nav_item_search -> SearchActivity::class.java
                     R.id.nav_item_share -> ShareActivity::class.java
