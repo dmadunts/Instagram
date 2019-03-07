@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.example.renai.instagram.screens.InstagramApp
 import com.example.renai.instagram.screens.login.LoginActivity
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -31,7 +32,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected inline fun <reified T : BaseViewModel> initViewModel(): T =
         ViewModelProviders.of(
             this, ViewModelFactory(
-                application,
+                application as InstagramApp,
                 commonViewModel = commonViewModel,
                 onFailureListener = commonViewModel
             )
