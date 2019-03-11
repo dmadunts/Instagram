@@ -6,7 +6,7 @@ import java.util.*
 
 data class Notification(
     val uid: String = "", val username: String = "", val photo: String? = null,
-    val postId: String = "", val postImage: String? = null,
+    val postId: String? = null, val postImage: String? = null,
     val commentText: String? = null,
     val read: Boolean = false,
     val type: NotificationType = NotificationType.Like,

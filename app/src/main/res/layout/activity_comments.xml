@@ -64,6 +64,7 @@
             >
 
         <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_photo"
                 style="@style/icon"
                 android:padding="6dp"
                 android:src="@drawable/person"

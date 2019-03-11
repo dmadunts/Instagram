@@ -22,7 +22,7 @@ class NotificationsCreator(
 ) : LifecycleOwner {
     private val lifecycleRegistry = LifecycleRegistry(this)
 
-    override fun getLifecycle(): Lifecycle = LifecycleRegistry(this)
+    override fun getLifecycle(): Lifecycle = lifecycleRegistry
 
     init {
         lifecycleRegistry.markState(Lifecycle.State.CREATED)
@@ -44,6 +44,8 @@ class NotificationsCreator(
                         }
                     }
                     is Event.CreateLike -> {
+                        Log.d("NotificationCreator", "Notification observed")
+
                         val userData = usersRepository.getUser(event.uid)
                         val postData = feedPostsRepository.getFeedPost(event.uid, event.postId)
 
@@ -58,6 +60,7 @@ class NotificationsCreator(
                             )
                             notificationsRepository.createNotification(post.uid, notification)
                                 .addOnFailureListener { Log.d(TAG, "Failed to create notification", it) }
+                            Log.d("NotificationCreator", "Notification created")
                         }
                     }
                     is Event.CreateComment -> {
@@ -72,7 +75,7 @@ class NotificationsCreator(
                                     commentText = event.comment.text,
                                     type = NotificationType.Comment
                                 )
-                                notificationsRepository.createNotification(event.comment.uid, notification)
+                                notificationsRepository.createNotification(post.uid, notification)
                                     .addOnFailureListener { Log.d(TAG, "Failed to create notification", it) }
                             }
                     }

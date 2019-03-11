@@ -16,7 +16,7 @@ class FirebaseNotificationsRepository : NotificationsRepository {
 
     override fun getNotifications(uid: String): LiveData<List<Notification>> =
         FirebaseLiveData(notificationRef(uid)).map {
-            it.children.map { it.asNotification()!! }
+            it.children.map { it.asNotification()!! }.sortedByDescending { it.timestampDate() }
         }
 
     override fun setNotificationsAsRead(uid: String, ids: List<String>, read: Boolean): Task<Unit> {

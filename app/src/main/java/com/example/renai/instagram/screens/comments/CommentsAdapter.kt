@@ -11,6 +11,7 @@ import com.example.renai.instagram.common.formatRelativeTimestamp
 import com.example.renai.instagram.models.Comment
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setCaptionText
+import kotlinx.android.synthetic.main.activity_comments.view.*
 import kotlinx.android.synthetic.main.comments_item.view.*
 import java.util.*
 

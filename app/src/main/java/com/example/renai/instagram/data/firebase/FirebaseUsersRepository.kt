@@ -67,7 +67,8 @@ class FirebaseUsersRepository : UsersRepository {
     override fun removeFollower(userUid: String, followUid: String): Task<Unit> =
         getFollowersRef(userUid, followUid).removeValue().toUnit()
 
-    override fun currentUid() = FirebaseAuth.getInstance().currentUser?.uid
+    override fun currentUid() = auth.currentUser?.uid
+
     private fun getFollowsRef(userUid: String, followUid: String) =
         database.child("users").child(userUid).child("follows").child(followUid)
 
@@ -97,8 +98,8 @@ class FirebaseUsersRepository : UsersRepository {
         }
     }
 
-    private val storageRef = storage.child("users/${currentUid()}/photo")
-    private val databaseRef = database.child("users/${currentUid()}/photo")
+    private val storageRef = storage.child("users/${currentUid()!!}/photo")
+    private val databaseRef = database.child("users/${currentUid()!!}/photo")
 
     override fun uploadUserPhoto(localImage: Uri): Task<Uri> =
         storageRef.putFile(localImage).onSuccessTask {

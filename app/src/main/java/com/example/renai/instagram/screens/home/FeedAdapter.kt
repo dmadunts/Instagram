@@ -43,7 +43,7 @@ class FeedAdapter(private var listener: Listener) :
         val post = posts[position]
         val likes = postLikes[position] ?: defaultPostLikes
         with(holder.view) {
-            user_photo_image.loadUserPhoto(post.photo)
+            user_photo.loadUserPhoto(post.photo)
             username_text.text = post.username
             post_image.loadImage(post.image)
             if (likes.likesCount == 0) {

@@ -9,6 +9,7 @@ import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.coordinateBtnAndInputs
+import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setupAuthGuard
 import kotlinx.android.synthetic.main.activity_comments.*
 
@@ -28,7 +29,6 @@ class CommentsActivity : BaseActivity() {
 
         coordinateBtnAndInputs(post_comment_btn, comment_text)
         back_image.setOnClickListener { finish() }
-
 
         coordinateBtnAndInputs(post_comment_btn, comment_text)
         post_comment_btn.setOnClickListener {
@@ -50,6 +50,7 @@ class CommentsActivity : BaseActivity() {
             mViewModel.user.observe(this, Observer {
                 it?.let {
                     mUser = it
+                    user_photo.loadUserPhoto(mUser.photo)
                 }
             })
 

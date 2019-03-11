@@ -4,11 +4,14 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.example.renai.instagram.R
+import com.example.renai.instagram.data.firebase.common.auth
 import com.example.renai.instagram.screens.comments.CommentsActivity
 import com.example.renai.instagram.screens.common.BaseActivity
+import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setupAuthGuard
 import com.example.renai.instagram.screens.common.setupBottomNavigation
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.feed_item.*
 
 class HomeActivity : BaseActivity(), FeedAdapter.Listener {
     private lateinit var mAdapter: FeedAdapter
@@ -33,6 +36,12 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
             mViewModel.feedPosts.observe(this, Observer {
                 it?.let {
                     mAdapter.updatePosts(it)
+                }
+            })
+
+            mViewModel.user.observe(this, Observer {
+                it?.let {
+                    user_photo.loadUserPhoto(m)
                 }
             })
 

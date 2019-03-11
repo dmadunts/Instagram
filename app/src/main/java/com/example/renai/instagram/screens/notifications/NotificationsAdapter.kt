@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.SimpleCallback
+import com.example.renai.instagram.common.formatRelativeTimestamp
 import com.example.renai.instagram.models.Notification
 import com.example.renai.instagram.models.NotificationType
 import com.example.renai.instagram.screens.common.loadImage
@@ -14,6 +15,7 @@ import com.example.renai.instagram.screens.common.loadImageOrHide
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setCaptionText
 import kotlinx.android.synthetic.main.notification_item.view.*
+import java.util.*
 
 class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -36,8 +38,9 @@ class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.ViewHolde
                     NotificationType.Comment -> context.getString(R.string.commented, notification.commentText)
                     NotificationType.Follow -> context.getString(R.string.started_following_you)
                 }
-            notification_text.setCaptionText(notification.username, notificationText, notification.timestampDate())
+            notification_text.setCaptionText(notification.username, notificationText)
             post_image.loadImageOrHide(notification.postImage)
+            time.text = formatRelativeTimestamp(notification.timestampDate(), Date())
         }
     }
 
