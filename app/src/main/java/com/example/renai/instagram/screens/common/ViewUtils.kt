@@ -63,6 +63,14 @@ fun ImageView.loadUserPhoto(photoUrl: String?) =
         GlideApp.with(this).load(photoUrl).fallback(R.drawable.person).into(this)
     }
 
+fun ImageView.loadImageOrHide(image: String?) =
+    if (image != null) {
+        visibility = View.VISIBLE
+        loadImage(image)
+    } else {
+        visibility = View.GONE
+    }
+
 fun Editable.toStringOrNull(): String? {
     val str = toString()
     return if (str.isEmpty()) null else str

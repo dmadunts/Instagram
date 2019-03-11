@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import com.example.renai.instagram.data.firebase.common.auth
+import com.example.renai.instagram.data.firebase.common.database
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthGuard(private val activity: BaseActivity, f: (String) -> Unit) : LifecycleObserver {

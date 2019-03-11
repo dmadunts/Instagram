@@ -8,6 +8,7 @@ import com.example.renai.instagram.screens.comments.CommentsViewModel
 import com.example.renai.instagram.screens.editprofile.EditProfileViewModel
 import com.example.renai.instagram.screens.home.HomeViewModel
 import com.example.renai.instagram.screens.login.LoginViewModel
+import com.example.renai.instagram.screens.notifications.NotificationsViewModel
 import com.example.renai.instagram.screens.profile.ProfileViewModel
 import com.example.renai.instagram.screens.profilesettings.ProfileSettingsViewModel
 import com.example.renai.instagram.screens.register.RegisterViewModel
@@ -23,8 +24,8 @@ class ViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val usersRepository = app.usersRepository
         val feedPostsRepository = app.feedPostsRepository
+        val notificationsRepository = app.notificationsRepository
         val authManager = app.authManager
-
         when {
             modelClass.isAssignableFrom(AddFriendsViewModel::class.java) ->
                 return AddFriendsViewModel(
@@ -63,6 +64,9 @@ class ViewModelFactory(
 
             modelClass.isAssignableFrom(CommentsViewModel::class.java) ->
                 return CommentsViewModel(feedPostsRepository, onFailureListener, usersRepository) as T
+
+            modelClass.isAssignableFrom(NotificationsViewModel::class.java) ->
+                return NotificationsViewModel(notificationsRepository, onFailureListener) as T
 
             else -> error("Unknown viewmodel class: $modelClass")
         }

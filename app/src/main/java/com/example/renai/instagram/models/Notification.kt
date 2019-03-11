@@ -9,9 +9,14 @@ data class Notification(
     val postId: String = "", val postImage: String? = null,
     val commentText: String? = null,
     val read: Boolean = false,
+    val type: NotificationType = NotificationType.Like,
     val timestamp: Any = ServerValue.TIMESTAMP,
     @get:Exclude val id: String = ""
 ) {
     fun timestampDate(): Date = Date(timestamp as Long)
+}
+
+enum class NotificationType {
+    Follow, Like, Comment
 }
 

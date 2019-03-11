@@ -2,10 +2,15 @@ package com.example.renai.instagram.data.firebase
 
 import android.arch.lifecycle.LiveData
 import android.net.Uri
+import com.example.renai.instagram.common.Event
+import com.example.renai.instagram.common.EventBus
 import com.example.renai.instagram.common.toUnit
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.map
-import com.example.renai.instagram.data.firebase.common.*
+import com.example.renai.instagram.data.firebase.common.FirebaseLiveData
+import com.example.renai.instagram.data.firebase.common.auth
+import com.example.renai.instagram.data.firebase.common.database
+import com.example.renai.instagram.data.firebase.common.storage
 import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -19,7 +24,6 @@ class FirebaseUsersRepository : UsersRepository {
             .push().setValue(imageDownloadUri.toString()).toUnit()
     }
 
-    //Todo set onFailurelistener
     override fun uploadUserImage(uid: String, imageUri: Uri): Task<Uri> =
         storage.child("users").child(uid).child(imageUri.lastPathSegment!!)
             .putFile(imageUri).onSuccessTask {
@@ -52,6 +56,7 @@ class FirebaseUsersRepository : UsersRepository {
 
     override fun addFollow(userUid: String, followUid: String): Task<Unit> =
         getFollowsRef(userUid, followUid).setValue(true).toUnit()
+            .addOnSuccessListener { EventBus.publish(Event.CreateFollow(userUid, followUid)) }
 
     override fun removeFollow(userUid: String, followUid: String): Task<Unit> =
         getFollowsRef(userUid, followUid).removeValue().toUnit()
@@ -95,19 +100,18 @@ class FirebaseUsersRepository : UsersRepository {
     private val storageRef = storage.child("users/${currentUid()}/photo")
     private val databaseRef = database.child("users/${currentUid()}/photo")
 
-    //Todo set onFailurelistener
     override fun uploadUserPhoto(localImage: Uri): Task<Uri> =
         storageRef.putFile(localImage).onSuccessTask {
             storageRef.downloadUrl
-                .addOnCompleteListener {}
-                .addOnFailureListener {}
         }
 
     override fun updateUserPhoto(downloadUrl: Uri): Task<Unit> =
         databaseRef.setValue(downloadUrl.toString()).toUnit()
 
-    override fun getUser(): LiveData<User> =
-        FirebaseLiveData(database.child("users").child(currentUid()!!)).map {
+    override fun getUser(): LiveData<User> = getUser(currentUid()!!)
+
+    override fun getUser(uid: String): LiveData<User> =
+        FirebaseLiveData(database.child("users").child(uid)).map {
             it.asUser()!!
         }
 
