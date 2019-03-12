@@ -1,10 +1,8 @@
 package com.example.renai.instagram.screens.notifications
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.util.Log
+import com.example.renai.instagram.common.BaseEventListener
 import com.example.renai.instagram.common.Event
 import com.example.renai.instagram.common.EventBus
 import com.example.renai.instagram.data.FeedPostsRepository
@@ -19,15 +17,8 @@ class NotificationsCreator(
     private val notificationsRepository: NotificationsRepository,
     private val usersRepository: UsersRepository,
     private val feedPostsRepository: FeedPostsRepository
-) : LifecycleOwner {
-    private val lifecycleRegistry = LifecycleRegistry(this)
-
-    override fun getLifecycle(): Lifecycle = lifecycleRegistry
-
+) : BaseEventListener() {
     init {
-        lifecycleRegistry.markState(Lifecycle.State.CREATED)
-        lifecycleRegistry.markState(Lifecycle.State.STARTED)
-
         EventBus.events.observe(this, Observer {
             it?.let { event ->
                 when (event) {

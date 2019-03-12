@@ -1,7 +1,6 @@
 package com.example.renai.instagram.data.firebase
 
 import android.arch.lifecycle.LiveData
-import android.util.Log
 import com.example.renai.instagram.common.*
 import com.example.renai.instagram.data.FeedPostLike
 import com.example.renai.instagram.data.FeedPostsRepository
@@ -14,9 +13,13 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 
 class FirebaseFeedPostsRepository : FeedPostsRepository {
-    override fun createFeedPost(uid: String, feedPost: FeedPost): Task<Unit> =
-        database.child("feed-posts").child(uid)
-            .push().setValue(feedPost).toUnit()
+    override fun createFeedPost(uid: String, feedPost: FeedPost): Task<Unit> {
+
+        val reference = database.child("feed-posts").child(uid).push()
+        return reference.setValue(feedPost).toUnit().addOnSuccessListener {
+            EventBus.publish(Event.CreateFeedPost(feedPost.copy(id = reference.key!!)))
+        }
+    }
 
     override fun getLikes(postId: String): LiveData<List<FeedPostLike>> =
         FirebaseLiveData(database.child("likes").child(postId)).map {
@@ -33,7 +36,6 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
                     reference.setValue(true)
                         .addOnSuccessListener {
                             EventBus.publish(Event.CreateLike(postId, uid))
-                            Log.d("FirebaseFeedPosts", "toggleLike: published")
                         }
                 } else {
                     reference.removeValue()

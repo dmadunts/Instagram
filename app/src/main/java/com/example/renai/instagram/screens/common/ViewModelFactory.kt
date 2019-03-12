@@ -12,6 +12,7 @@ import com.example.renai.instagram.screens.notifications.NotificationsViewModel
 import com.example.renai.instagram.screens.profile.ProfileViewModel
 import com.example.renai.instagram.screens.profilesettings.ProfileSettingsViewModel
 import com.example.renai.instagram.screens.register.RegisterViewModel
+import com.example.renai.instagram.screens.search.SearchViewModel
 import com.example.renai.instagram.screens.share.ShareViewModel
 import com.google.android.gms.tasks.OnFailureListener
 
@@ -26,6 +27,7 @@ class ViewModelFactory(
         val feedPostsRepository = app.feedPostsRepository
         val notificationsRepository = app.notificationsRepository
         val authManager = app.authManager
+        val searchPostsRepository = app.searchPostsRepository
         when {
             modelClass.isAssignableFrom(AddFriendsViewModel::class.java) ->
                 return AddFriendsViewModel(
@@ -67,6 +69,9 @@ class ViewModelFactory(
 
             modelClass.isAssignableFrom(NotificationsViewModel::class.java) ->
                 return NotificationsViewModel(notificationsRepository, onFailureListener) as T
+
+            modelClass.isAssignableFrom(SearchViewModel::class.java) ->
+                return SearchViewModel(searchPostsRepository, onFailureListener) as T
 
             else -> error("Unknown viewmodel class: $modelClass")
         }

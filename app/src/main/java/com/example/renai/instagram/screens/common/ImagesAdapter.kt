@@ -1,4 +1,4 @@
-package com.example.renai.instagram.screens.profile
+package com.example.renai.instagram.screens.common
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.SimpleCallback
-import com.example.renai.instagram.screens.common.loadImage
 
 class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ViewHolder>() {
 

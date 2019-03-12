@@ -15,7 +15,6 @@ import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 
 class FirebaseUsersRepository : UsersRepository {
@@ -98,16 +97,16 @@ class FirebaseUsersRepository : UsersRepository {
         }
     }
 
-    private val storageRef = storage.child("users/${currentUid()!!}/photo")
-    private val databaseRef = database.child("users/${currentUid()!!}/photo")
+    private fun getStorageRef() = storage.child("users/${currentUid()!!}/photo")
+    private fun getDatabaseRef() = database.child("users/${currentUid()!!}/photo")
 
     override fun uploadUserPhoto(localImage: Uri): Task<Uri> =
-        storageRef.putFile(localImage).onSuccessTask {
-            storageRef.downloadUrl
+        getStorageRef().putFile(localImage).onSuccessTask {
+            getStorageRef().downloadUrl
         }
 
     override fun updateUserPhoto(downloadUrl: Uri): Task<Unit> =
-        databaseRef.setValue(downloadUrl.toString()).toUnit()
+        getDatabaseRef().setValue(downloadUrl.toString()).toUnit()
 
     override fun getUser(): LiveData<User> = getUser(currentUid()!!)
 

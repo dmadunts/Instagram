@@ -3,6 +3,7 @@ package com.example.renai.instagram.common
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.example.renai.instagram.models.Comment
+import com.example.renai.instagram.models.FeedPost
 
 object EventBus {
     private val liveDataBus = MutableLiveData<Event>()
@@ -17,4 +18,5 @@ sealed class Event {
     data class CreateComment(val postId: String, val comment: Comment) : Event()
     data class CreateLike(val postId: String, val uid: String) : Event()
     data class CreateFollow(val userUid: String, val followUid: String) : Event()
+    data class CreateFeedPost(val feedPost: FeedPost) : Event()
 }

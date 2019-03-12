@@ -1,7 +1,7 @@
 package com.example.renai.instagram.screens.share
 
 import android.net.Uri
-import android.util.Log
+import com.example.renai.instagram.common.SingleLiveEvent
 import com.example.renai.instagram.data.firebase.FirebaseFeedPostsRepository
 import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.FeedPost
@@ -16,6 +16,8 @@ class ShareViewModel(
     onFailureListener: OnFailureListener
 ) : BaseViewModel(onFailureListener) {
     val user = usersRepository.getUser()
+    private val _shareCompletedEvent = SingleLiveEvent<Unit>()
+    val shareComletedEvent = _shareCompletedEvent
 
     fun share(user: User, caption: String, imageUri: Uri?) {
         if (imageUri != null) {
@@ -27,20 +29,20 @@ class ShareViewModel(
                         makeFeedPost(user, caption, downloadUrl.toString())
                     )
                 )
-            }
-        } else {
-            Log.d("ShareViewModel", "imageUri is null")
+            }.addOnCompleteListener {
+                _shareCompletedEvent.call()
+            }.addOnFailureListener(onFailureListener)
         }
     }
-}
 
-private fun makeFeedPost(user: User, caption: String, imageDownloadUrl: String): FeedPost {
-    return FeedPost(
-        uid = user.uid,
-        username = user.username,
-        image = imageDownloadUrl,
-        caption = caption,
-        photo = user.photo
-    )
+    private fun makeFeedPost(user: User, caption: String, imageDownloadUrl: String): FeedPost {
+        return FeedPost(
+            uid = user.uid,
+            username = user.username,
+            image = imageDownloadUrl,
+            caption = caption,
+            photo = user.photo
+        )
+    }
 }
 

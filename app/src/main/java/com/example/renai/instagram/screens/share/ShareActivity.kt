@@ -10,7 +10,6 @@ import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.CameraHelper
 import com.example.renai.instagram.screens.common.loadImage
 import com.example.renai.instagram.screens.common.setupAuthGuard
-import com.example.renai.instagram.screens.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_share.*
 
 class ShareActivity : BaseActivity() {
@@ -33,6 +32,8 @@ class ShareActivity : BaseActivity() {
                     mUser = user
                 }
             })
+
+            mViewModel.shareComletedEvent.observe(this, Observer { finish() })
         }
         back_image.setOnClickListener { finish() }
         share_text.setOnClickListener { share() }
@@ -50,8 +51,6 @@ class ShareActivity : BaseActivity() {
 
     private fun share() {
         mViewModel.share(mUser, caption_input.text.toString(), mCamera.imageUri)
-        startActivity(Intent(this, HomeActivity::class.java))
-        finish()
     }
 }
 

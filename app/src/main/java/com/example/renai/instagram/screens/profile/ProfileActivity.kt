@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.addfriends.AddFriendsActivity
-import com.example.renai.instagram.screens.common.BaseActivity
-import com.example.renai.instagram.screens.common.loadUserPhoto
-import com.example.renai.instagram.screens.common.setupAuthGuard
-import com.example.renai.instagram.screens.common.setupBottomNavigation
+import com.example.renai.instagram.screens.common.*
 import com.example.renai.instagram.screens.editprofile.EditProfileActivity
 import com.example.renai.instagram.screens.profilesettings.ProfileSettingsActivity
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -52,12 +49,15 @@ class ProfileActivity : BaseActivity() {
                 it?.let { user ->
                     username_text.text = user.username
                     profile_picture.loadUserPhoto(user.photo)
+                    followers_count_text.text = user.followers.size.toString()
+                    following_count_text.text = user.follows.size.toString()
                 }
             })
 
             mViewModel.images.observe(this, Observer {
-                it?.let {
-                    mAdapter.updateImages(it)
+                it?.let { images ->
+                    mAdapter.updateImages(images)
+                    posts_count_text.text = images.size.toString()
                 }
             })
         }

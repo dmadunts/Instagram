@@ -6,24 +6,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".screens.home.HomeActivity">
+        tools:context=".screens.home.HomeActivity"
+        >
 
     <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/toolbar">
+            style="@style/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
 
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
             <TextView
-                    tools:text="username.text"
                     android:id="@+id/username_text"
                     style="@style/toolbar_title"
+                    tools:text="username.text"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
             <ImageView
                     android:id="@+id/add_friends_image"
@@ -32,7 +38,8 @@
                     app:layout_constraintEnd_toStartOf="@id/settings_image"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
             <ImageView
                     android:id="@+id/settings_image"
@@ -40,7 +47,8 @@
                     android:src="@drawable/ic_more"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
@@ -59,57 +67,64 @@
             app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/edit_profile_btn"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            />
 
     <TextView
+            android:id="@+id/posts_label"
             android:text="@string/posts"
             style="@style/profile_text"
             app:layout_constraintStart_toStartOf="@id/edit_profile_btn"
-            app:layout_constraintEnd_toStartOf="@id/followers_text"
+            app:layout_constraintEnd_toStartOf="@id/followers_label"
             app:layout_constraintTop_toBottomOf="@id/posts_count_text"
-            android:id="@+id/posts_text"/>
+            />
 
     <TextView
+            android:id="@+id/followers_label"
             android:text="@string/followers"
-            app:layout_constraintStart_toEndOf="@id/posts_text"
-            app:layout_constraintEnd_toStartOf="@id/following_text"
-            app:layout_constraintBaseline_toBaselineOf="@id/posts_text"
+            app:layout_constraintStart_toEndOf="@id/posts_label"
+            app:layout_constraintEnd_toStartOf="@id/following_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/posts_label"
             style="@style/profile_text"
-            android:id="@+id/followers_text"/>
+            />
 
     <TextView
+            android:id="@+id/following_label"
             android:text="@string/following"
             style="@style/profile_text"
-            app:layout_constraintStart_toEndOf="@id/followers_text"
+            app:layout_constraintStart_toEndOf="@id/followers_label"
             app:layout_constraintEnd_toEndOf="@id/edit_profile_btn"
-            app:layout_constraintBaseline_toBaselineOf="@id/posts_text"
-            android:id="@+id/following_text"/>
+            app:layout_constraintBaseline_toBaselineOf="@id/posts_label"
+            />
 
     <TextView
             android:id="@+id/posts_count_text"
             tools:text="50"
             style="@style/profile_text_count"
             app:layout_constraintVertical_bias="0.3"
-            app:layout_constraintStart_toStartOf="@id/posts_text"
-            app:layout_constraintEnd_toEndOf="@id/posts_text"
+            app:layout_constraintStart_toStartOf="@id/posts_label"
+            app:layout_constraintEnd_toEndOf="@id/posts_label"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/edit_profile_btn"/>
+            app:layout_constraintBottom_toTopOf="@id/edit_profile_btn"
+            />
 
     <TextView
+            android:id="@+id/followers_count_text"
             tools:text="100"
             app:layout_constraintBaseline_toBaselineOf="@id/posts_count_text"
-            app:layout_constraintStart_toStartOf="@id/followers_text"
-            app:layout_constraintEnd_toEndOf="@id/followers_text"
+            app:layout_constraintStart_toStartOf="@id/followers_label"
+            app:layout_constraintEnd_toEndOf="@id/followers_label"
             style="@style/profile_text_count"
-            android:id="@+id/followers_count_text"/>
+            />
 
     <TextView
+            android:id="@+id/following_count_text"
             tools:text="200"
-            app:layout_constraintStart_toStartOf="@id/following_text"
-            app:layout_constraintEnd_toEndOf="@id/following_text"
+            app:layout_constraintStart_toStartOf="@id/following_label"
+            app:layout_constraintEnd_toEndOf="@id/following_label"
             app:layout_constraintBaseline_toBaselineOf="@id/posts_count_text"
             style="@style/profile_text_count"
-            android:id="@+id/following_count_text"/>
+            />
 
     <Button
             android:id="@+id/edit_profile_btn"
@@ -127,7 +142,8 @@
             app:layout_constraintHorizontal_weight="5"
             app:layout_constraintBottom_toBottomOf="@id/profile_picture"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/profile_picture"/>
+            app:layout_constraintStart_toEndOf="@id/profile_picture"
+            />
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/images_recycler"
@@ -136,7 +152,8 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/top_border_grey"
             app:layout_constraintTop_toBottomOf="@id/edit_profile_btn"
-            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"/>
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view"
+            />
 
 
     <include layout="@layout/bottom_navigation_view"/>
