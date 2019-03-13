@@ -19,9 +19,11 @@ class HomeViewModel(
     val goToCommentsScreen = _goToCommentsScreen
 
     fun init(uid: String) {
-        this.uid = uid
-        feedPosts = feedPostsRepository.getFeedPosts(uid).map {
-            it.sortedByDescending { it.timestampDate() }
+        if (!this::uid.isInitialized) {
+            this.uid = uid
+            feedPosts = feedPostsRepository.getFeedPosts(uid).map {
+                it.sortedByDescending { it.timestampDate() }
+            }
         }
     }
 

@@ -11,7 +11,7 @@ import com.example.renai.instagram.screens.InstagramApp
 import com.example.renai.instagram.screens.login.LoginActivity
 
 abstract class BaseActivity : AppCompatActivity() {
-    protected lateinit var commonViewModel: CommonViewModel
+    lateinit var commonViewModel: CommonViewModel
 
     companion object {
         const val TAG = "BaseActivity"
@@ -29,7 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
         Log.d("BaseActivity", "onCreate")
     }
 
-    protected inline fun <reified T : BaseViewModel> initViewModel(): T =
+    inline fun <reified T : BaseViewModel> initViewModel(): T =
         ViewModelProviders.of(
             this, ViewModelFactory(
                 application as InstagramApp,

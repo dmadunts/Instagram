@@ -11,6 +11,8 @@ class ProfileViewModel(private val usersRepository: FirebaseUsersRepository, onF
     lateinit var images: LiveData<List<String>>
 
     fun init(uid: String) {
-        images = usersRepository.getImages(uid)
+        if (!this::images.isInitialized) {
+            images = usersRepository.getImages(uid)
+        }
     }
 }

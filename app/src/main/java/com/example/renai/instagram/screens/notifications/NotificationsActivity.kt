@@ -20,9 +20,9 @@ class NotificationsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
-        setupBottomNavigation(3)
 
         setupAuthGuard { uid ->
+            setupBottomNavigation(uid, 3)
             mViewModel = initViewModel()
             mViewModel.init(uid)
             mViewModel.notifications.observe(this, Observer {
