@@ -7,7 +7,7 @@ import com.google.android.gms.tasks.OnFailureListener
 
 class ProfileViewModel(private val usersRepository: FirebaseUsersRepository, onFailureListener: OnFailureListener) :
     BaseViewModel(onFailureListener) {
-    val user = usersRepository.getUser()
+    var user = usersRepository.getUser()
     lateinit var images: LiveData<List<String>>
 
     fun init(uid: String) {

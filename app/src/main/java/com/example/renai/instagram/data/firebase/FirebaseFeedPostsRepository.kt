@@ -55,7 +55,7 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
             it.asFeedPost()!!
         }
 
-
+    //TODO ValueEventListener instead of ListenerForSingleValueEvent??
     override fun copyFeedPosts(postsAuthorUid: String, uid: String): Task<Unit> =
         task<Unit> { taskSource ->
             database.child("feed-posts").child(postsAuthorUid)

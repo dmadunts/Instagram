@@ -22,18 +22,15 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        mAdapter = FeedAdapter(this)
-        feed_recycler.adapter = mAdapter
-        feed_recycler.layoutManager = LinearLayoutManager(this)
-
         setupAuthGuard { uid ->
             setupBottomNavigation(uid, 0)
             mViewModel = initViewModel()
             mViewModel.init(uid)
+
             mViewModel.feedPosts.observe(this, Observer {
                 it?.let {
                     mAdapter.updatePosts(it)
-                    feed_recycler.smoothScrollToPosition(0)
+//                    feed_recycler.smoothScrollToPosition(0) TODO scroll when size changes
                 }
             })
 
@@ -42,6 +39,16 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
                     CommentsActivity.start(this, postId)
                 }
             })
+
+//            mViewModel.user.observe(this, Observer {
+//                it?.let {
+//                    mAdapter.editPosts(it)
+//                }
+//            })
+
+            mAdapter = FeedAdapter(this)
+            feed_recycler.adapter = mAdapter
+            feed_recycler.layoutManager = LinearLayoutManager(this)
         }
     }
 

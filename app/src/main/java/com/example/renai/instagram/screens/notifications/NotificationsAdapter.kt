@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.SimpleCallback
+import com.example.renai.instagram.common.ValueEventListenerAdapter
 import com.example.renai.instagram.common.formatRelativeTimestamp
+import com.example.renai.instagram.data.firebase.common.auth
+import com.example.renai.instagram.data.firebase.common.database
 import com.example.renai.instagram.models.Notification
 import com.example.renai.instagram.models.NotificationType
-import com.example.renai.instagram.screens.common.loadImage
+import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.loadImageOrHide
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setCaptionText
@@ -28,19 +31,23 @@ class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.ViewHolde
     }
 
 
+    //TODO Needs refactor
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notification = notifications[position]
         with(holder.view) {
-            user_photo.loadUserPhoto(notification.photo)
-            val notificationText =
-                when (notification.type) {
-                    NotificationType.Like -> context.getString(R.string.liked_your_post)
-                    NotificationType.Comment -> context.getString(R.string.commented, notification.commentText)
-                    NotificationType.Follow -> context.getString(R.string.started_following_you)
-                }
-            notification_text.setCaptionText(notification.username, notificationText)
-            post_image.loadImageOrHide(notification.postImage)
-            time.text = formatRelativeTimestamp(notification.timestampDate(), Date())
+            database.child("users").child(auth.currentUser!!.uid).addValueEventListener(ValueEventListenerAdapter {
+                val currentUser = it.getValue(User::class.java)!!
+                user_photo.loadUserPhoto(notification.photo)
+                val notificationText =
+                    when (notification.type) {
+                        NotificationType.Like -> context.getString(R.string.liked_your_post)
+                        NotificationType.Comment -> context.getString(R.string.commented, notification.commentText)
+                        NotificationType.Follow -> context.getString(R.string.started_following_you)
+                    }
+                notification_text.setCaptionText(notification.uid, notificationText)
+                post_image.loadImageOrHide(notification.postImage)
+                time.text = formatRelativeTimestamp(notification.timestampDate(), Date())
+            })
         }
     }
 

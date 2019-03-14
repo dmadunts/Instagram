@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.renai.instagram.R
 import com.example.renai.instagram.common.SimpleCallback
+import com.example.renai.instagram.common.ValueEventListenerAdapter
+import com.example.renai.instagram.data.firebase.common.auth
+import com.example.renai.instagram.data.firebase.common.database
 import com.example.renai.instagram.models.FeedPost
+import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.loadImage
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setCaptionText
@@ -42,38 +46,45 @@ class FeedAdapter(private var listener: Listener) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
         val likes = postLikes[position] ?: defaultPostLikes
-        with(holder.view) {
-            user_photo.loadUserPhoto(post.photo)
-            username_text.text = post.username
-            post_image.loadImage(post.image)
-            if (likes.likesCount == 0) {
-                likes_text.visibility = View.GONE
-            } else {
-                likes_text.visibility = View.VISIBLE
-                val quantityString =
-                    context.resources.getQuantityString(R.plurals.likes_count, likes.likesCount, likes.likesCount)
-                likes_text.text = quantityString
+        database.child("users").child(auth.currentUser!!.uid).addValueEventListener(ValueEventListenerAdapter {
+            val currentUser = it.getValue(User::class.java)!!
+            with(holder.view) {
+                user_photo.loadUserPhoto(currentUser.photo)
+                username_text.text = currentUser.username
+                post_image.loadImage(post.image)
+                if (likes.likesCount == 0) {
+                    likes_text.visibility = View.GONE
+                } else {
+                    likes_text.visibility = View.VISIBLE
+                    val quantityString =
+                        context.resources.getQuantityString(R.plurals.likes_count, likes.likesCount, likes.likesCount)
+                    likes_text.text = quantityString
+                }
+                if (post.caption.isEmpty()) {
+                    caption_text.visibility = View.GONE
+                } else {
+                    caption_text.visibility = View.VISIBLE
+                    caption_text.setCaptionText(currentUser.username, post.caption)
+                }
+                like_image.setOnClickListener { listener.toggleLike(post.id) }
+                like_image.setImageResource(
+                    if (likes.likedByUser) R.drawable.ic_likes_active
+                    else R.drawable.ic_likes_border
+                )
+                comment_image.setOnClickListener { listener.openComments(post.id) }
+                listener.loadLikes(post.id, position)
             }
-            if (post.caption.isEmpty()) {
-                caption_text.visibility = View.GONE
-            } else {
-                caption_text.visibility = View.VISIBLE
-                caption_text.setCaptionText(post.username, post.caption)
-            }
-            like_image.setOnClickListener { listener.toggleLike(post.id) }
-            like_image.setImageResource(
-                if (likes.likedByUser) R.drawable.ic_likes_active
-                else R.drawable.ic_likes_border
-            )
-            comment_image.setOnClickListener { listener.openComments(post.id) }
-            listener.loadLikes(post.id, position)
-        }
+        })
     }
 
     fun updatePosts(newPosts: List<FeedPost>) {
-        val diffResult = DiffUtil.calculateDiff(SimpleCallback(this.posts, newPosts, {it.id}))
+        val diffResult = DiffUtil.calculateDiff(SimpleCallback(this.posts, newPosts, { it.id }))
         this.posts = newPosts
         diffResult.dispatchUpdatesTo(this)
     }
+//
+//    fun editPosts(user: User) {
+//        this.user = user
+//    }
 }
 

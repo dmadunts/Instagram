@@ -34,13 +34,11 @@ class FirebaseUsersRepository : UsersRepository {
             database.child("users").child(it!!.user.uid).setValue(user)
         }.toUnit()
 
-
     override fun isUserExistsForEmail(email: String): Task<Boolean> =
         auth.fetchSignInMethodsForEmail(email).onSuccessTask {
             val signInMethods = it?.signInMethods ?: emptyList<String>()
             Tasks.forResult(signInMethods.isNotEmpty())
         }
-
 
     override fun getImages(uid: String): LiveData<List<String>> {
         return FirebaseLiveData(database.child("images").child(uid)).map {

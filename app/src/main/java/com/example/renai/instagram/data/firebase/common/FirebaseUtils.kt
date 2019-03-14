@@ -10,3 +10,4 @@ val auth: FirebaseAuth = FirebaseAuth.getInstance()
 val database: DatabaseReference = FirebaseDatabase.getInstance()
     .reference
 val storage: StorageReference = FirebaseStorage.getInstance().reference
+val currentUser = database.child("users").child(auth.currentUser!!.uid)

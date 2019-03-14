@@ -39,7 +39,7 @@ class ViewModelFactory(
                 return EditProfileViewModel(onFailureListener, usersRepository) as T
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) ->
-                return HomeViewModel(onFailureListener, feedPostsRepository) as T
+                return HomeViewModel(onFailureListener, feedPostsRepository, usersRepository) as T
 
             modelClass.isAssignableFrom(ProfileSettingsViewModel::class.java) ->
                 return ProfileSettingsViewModel(authManager, onFailureListener) as T
