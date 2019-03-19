@@ -3,12 +3,14 @@ package com.example.renai.instagram.screens.home
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.comments.CommentsActivity
 import com.example.renai.instagram.screens.common.BaseActivity
 import com.example.renai.instagram.screens.common.setupAuthGuard
 import com.example.renai.instagram.screens.common.setupBottomNavigation
 import kotlinx.android.synthetic.main.activity_home.*
+
 
 class HomeActivity : BaseActivity(), FeedAdapter.Listener {
     private lateinit var mAdapter: FeedAdapter
@@ -30,7 +32,6 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
             mViewModel.feedPosts.observe(this, Observer {
                 it?.let {
                     mAdapter.updatePosts(it)
-//                    feed_recycler.smoothScrollToPosition(0) TODO scroll when size changes
                 }
             })
 
@@ -40,15 +41,21 @@ class HomeActivity : BaseActivity(), FeedAdapter.Listener {
                 }
             })
 
-//            mViewModel.user.observe(this, Observer {
-//                it?.let {
-//                    mAdapter.editPosts(it)
-//                }
-//            })
+            mViewModel.user.observe(this, Observer {
+                it?.let {
+                    mAdapter.notifyDataSetChanged()
+                }
+            })
 
             mAdapter = FeedAdapter(this)
             feed_recycler.adapter = mAdapter
             feed_recycler.layoutManager = LinearLayoutManager(this)
+
+            //Removes blinking in RecyclerView
+            val animator = feed_recycler.itemAnimator
+            if (animator is SimpleItemAnimator) {
+                animator.supportsChangeAnimations = false
+            }
         }
     }
 

@@ -132,6 +132,7 @@ class InstagramBottomNavigation(
             if (nextActivity != null) {
                 val intent = Intent(activity, nextActivity)
                 intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
                 activity.startActivity(intent)
                 activity.overridePendingTransition(0, 0)
                 true

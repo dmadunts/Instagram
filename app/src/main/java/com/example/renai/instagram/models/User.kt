@@ -8,6 +8,7 @@ data class User(
     val email: String = "",
     val bio: String? = null,
     val website: String? = null,
+    val gender: String? = null,
     val phone: Long? = null,
     val photo: String? = null,
     @get:Exclude val uid: String = "",

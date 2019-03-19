@@ -15,7 +15,7 @@
 
     <style name="profile_text" parent="text">
         <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="profile_text_count" parent="text">
@@ -36,7 +36,7 @@
     <style name="icon">
         <item name="android:layout_width">@dimen/toolbar_height</item>
         <item name="android:layout_height">@dimen/toolbar_height</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:padding">14dp</item>
     </style>
 
     <style name="toolbar_title">

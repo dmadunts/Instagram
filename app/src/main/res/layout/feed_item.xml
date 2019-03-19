@@ -18,7 +18,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-            android:id="@+id/username_text"
+            android:id="@+id/username_title_text"
             tools:text="willsmith"
             android:textStyle="bold"
             android:layout_width="wrap_content"
@@ -31,7 +31,6 @@
     <ImageView
             android:id="@+id/more_image"
             style="@style/icon"
-            android:padding="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/ic_more"
             app:layout_constraintTop_toTopOf="@id/user_photo"

@@ -33,7 +33,7 @@ class FriendsAdapter(private val listener: Listener) : RecyclerView.Adapter<Frie
         with(holder.view) {
             val user = mUsers[position]
             photo_image.loadUserPhoto(user.photo)
-            username_text.text = user.username
+            username_title_text.text = user.username
             name_text.text = user.name
             follow_btn.setOnClickListener { listener.follow(user.uid) }
             following_btn.setOnClickListener { listener.unfollow(user.uid) }

@@ -46,11 +46,14 @@ class FeedAdapter(private var listener: Listener) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = posts[position]
         val likes = postLikes[position] ?: defaultPostLikes
-        database.child("users").child(auth.currentUser!!.uid).addValueEventListener(ValueEventListenerAdapter {
-            val currentUser = it.getValue(User::class.java)!!
+
+        database.child("users").child(auth.currentUser!!.uid).addListenerForSingleValueEvent(ValueEventListenerAdapter {
+            val user = it.getValue(User::class.java)
             with(holder.view) {
-                user_photo.loadUserPhoto(currentUser.photo)
-                username_text.text = currentUser.username
+                if (user != null) {
+                    user_photo.loadUserPhoto(user.photo)
+                    username_title_text.text = user.username
+                }
                 post_image.loadImage(post.image)
                 if (likes.likesCount == 0) {
                     likes_text.visibility = View.GONE
@@ -60,11 +63,13 @@ class FeedAdapter(private var listener: Listener) :
                         context.resources.getQuantityString(R.plurals.likes_count, likes.likesCount, likes.likesCount)
                     likes_text.text = quantityString
                 }
-                if (post.caption.isEmpty()) {
+                if (post.caption.isNullOrEmpty()) {
                     caption_text.visibility = View.GONE
                 } else {
                     caption_text.visibility = View.VISIBLE
-                    caption_text.setCaptionText(currentUser.username, post.caption)
+                    if (user != null) {
+                        caption_text.setCaptionText(user.username, post.caption)
+                    }
                 }
                 like_image.setOnClickListener { listener.toggleLike(post.id) }
                 like_image.setImageResource(
@@ -82,9 +87,5 @@ class FeedAdapter(private var listener: Listener) :
         this.posts = newPosts
         diffResult.dispatchUpdatesTo(this)
     }
-//
-//    fun editPosts(user: User) {
-//        this.user = user
-//    }
 }
 
