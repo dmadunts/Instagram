@@ -16,7 +16,8 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
     override fun createFeedPost(uid: String, feedPost: FeedPost): Task<Unit> {
 
         val reference = database.child("feed-posts").child(uid).push()
-        return reference.setValue(feedPost).toUnit().addOnSuccessListener {
+        return reference.setValue(feedPost).toUnit()
+            .addOnSuccessListener {
             EventBus.publish(Event.CreateFeedPost(feedPost.copy(id = reference.key!!)))
         }
     }
@@ -55,7 +56,6 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
             it.asFeedPost()!!
         }
 
-    //TODO ValueEventListener instead of ListenerForSingleValueEvent??
     override fun copyFeedPosts(postsAuthorUid: String, uid: String): Task<Unit> =
         task { taskSource ->
             database.child("feed-posts").child(postsAuthorUid)

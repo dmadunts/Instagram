@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/loading_dialog"
+        android:background="@drawable/custom_dialog"
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="20dp"

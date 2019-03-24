@@ -17,7 +17,7 @@ import com.example.renai.instagram.screens.common.setCaptionText
 import kotlinx.android.synthetic.main.notification_item.view.*
 import java.util.*
 
-class NotificationsAdapter(val currentUser: User) : RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
+class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
     private var notifications = listOf<Notification>()
@@ -32,14 +32,14 @@ class NotificationsAdapter(val currentUser: User) : RecyclerView.Adapter<Notific
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notification = notifications[position]
         with(holder.view) {
-            user_photo.loadUserPhoto(currentUser.photo)
+            user_photo.loadUserPhoto(notification.photo)
             val notificationText =
                 when (notification.type) {
                     NotificationType.Like -> context.getString(R.string.liked_your_post)
                     NotificationType.Comment -> context.getString(R.string.commented, notification.commentText)
                     NotificationType.Follow -> context.getString(R.string.started_following_you)
                 }
-            notification_text.setCaptionText(currentUser.username, notificationText)
+            notification_text.setCaptionText(notification.username, notificationText)
             post_image.loadImageOrHide(notification.postImage)
             time.text = formatRelativeTimestamp(notification.timestampDate(), Date())
         }

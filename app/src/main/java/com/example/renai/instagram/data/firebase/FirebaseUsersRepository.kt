@@ -3,9 +3,7 @@ package com.example.renai.instagram.data.firebase
 import android.arch.lifecycle.LiveData
 import android.net.Uri
 import android.util.Log
-import com.example.renai.instagram.common.Event
-import com.example.renai.instagram.common.EventBus
-import com.example.renai.instagram.common.toUnit
+import com.example.renai.instagram.common.*
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.map
 import com.example.renai.instagram.data.firebase.common.FirebaseLiveData
@@ -17,8 +15,6 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 
 class FirebaseUsersRepository : UsersRepository {
 
@@ -80,7 +76,7 @@ class FirebaseUsersRepository : UsersRepository {
         if (newUser.phone != currentUser.phone) updatesMap["phone"] = newUser.phone
         if (newUser.email != currentUser.email) updatesMap["email"] = newUser.email
         if (newUser.website != currentUser.website) updatesMap["website"] = newUser.website
-        if (newUser.gender!= currentUser.gender) updatesMap["gender"] = newUser.gender
+        if (newUser.gender != currentUser.gender) updatesMap["gender"] = newUser.gender
         return database.child("users").child(currentUid()!!).updateChildren(updatesMap).toUnit()
     }
 

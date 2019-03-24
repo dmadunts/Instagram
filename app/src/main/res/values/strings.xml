@@ -63,6 +63,17 @@
     <string name="commented">Commented: %s</string>
     <string name="search">Search</string>
     <string name="finishing_up">Finishing up…</string>
+    <string name="share_on_whatsapp">Share on WhatsApp</string>
+    <string name="copy_link">Copy link</string>
+    <string name="archive">Archive</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="turn_off_commenting">Turn Off Commenting</string>
+    <string name="report">Report…</string>
+    <string name="turn_off_post_notifications">Turn Off Post Notifications</string>
+    <string name="share_link">Share Link…</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="mute">Mute</string>
     <string-array name="genders_array">
         <item>Not Specified</item>
         <item>Male</item>

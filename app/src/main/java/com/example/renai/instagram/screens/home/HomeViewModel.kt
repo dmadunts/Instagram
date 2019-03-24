@@ -1,14 +1,11 @@
 package com.example.renai.instagram.screens.home
 
 import android.arch.lifecycle.LiveData
-import android.util.Log
 import com.example.renai.instagram.common.SingleLiveEvent
 import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.map
-import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.FeedPost
-import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.BaseViewModel
 import com.google.android.gms.tasks.OnFailureListener
 
@@ -24,13 +21,15 @@ class HomeViewModel(
     private val _goToCommentsScreen = SingleLiveEvent<String>()
     val goToCommentsScreen = _goToCommentsScreen
     var user = usersRepository.getUser()
-
+    val currentUser = usersRepository.currentUid()
     fun init(uid: String) {
         if (!this::uid.isInitialized) {
             this.uid = uid
             feedPosts = feedPostsRepository.getFeedPosts(uid).map {
                 it.sortedByDescending { it.timestampDate() }
             }
+
+
         }
     }
 

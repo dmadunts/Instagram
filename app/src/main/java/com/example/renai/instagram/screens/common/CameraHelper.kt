@@ -6,13 +6,18 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
+import com.example.renai.instagram.data.UsersRepository
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CameraHelper(private val activity: Activity) {
     var imageUri: Uri? = null
-    val REQUEST_CODE: Int = 1
+
+    companion object {
+        const val REQUEST_CODE: Int = 13
+    }
+
     private val simpleDateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
 
 

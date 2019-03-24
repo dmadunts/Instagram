@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/report"
+            android:title="@string/report"
+            />
+
+    <item
+            android:id="@+id/copy_link"
+            android:title="@string/copy_link"
+            />
+
+    <item
+            android:id="@+id/turnoff_notifications"
+            android:title="@string/turn_off_post_notifications"
+            />
+
+    <item
+            android:id="@+id/share_link"
+            android:title="@string/share_link"
+            />
+
+    <item
+            android:id="@+id/share_on_whatsapp"
+            android:title="@string/share_on_whatsapp"
+            />
+
+    <item
+            android:id="@+id/unfollow"
+            android:title="@string/unfollow"
+            />
+
+    <item
+            android:id="@+id/mute"
+            android:title="@string/mute"
+            />
+</menu>

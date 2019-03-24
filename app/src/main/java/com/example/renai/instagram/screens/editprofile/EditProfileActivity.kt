@@ -23,7 +23,9 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
 
     companion object {
         const val TAG = "EditProfileActivity"
+        const val REQUEST_CAMERA_CODE = 13
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,7 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == mCamera.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CAMERA_CODE && resultCode == Activity.RESULT_OK) {
             mViewModel.uploadAndSetPhoto(mCamera.imageUri!!)
         }
     }

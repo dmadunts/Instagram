@@ -81,6 +81,16 @@
                     app:layout_constraintTop_toTopOf="parent"
                     />
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_circle"
+                    app:civ_border_color="@color/white"
+                    app:civ_fill_color="@color/white"
+                    app:layout_constraintEnd_toEndOf="@id/profile_picture"
+                    app:layout_constraintBottom_toBottomOf="@id/profile_picture"
+                    />
+
             <TextView
                     android:id="@+id/posts_label"
                     android:text="@string/posts"

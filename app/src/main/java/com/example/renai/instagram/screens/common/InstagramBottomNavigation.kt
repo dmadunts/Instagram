@@ -54,14 +54,14 @@ class InstagramBottomNavigation(
     }
 
     private fun showNotifications(notifications: List<Notification>) {
-        if (lastTooltipView != null) {
-            val parent = mNotificationsContentView.parent
-            if (parent != null) {
-                (parent as ViewGroup).removeView(mNotificationsContentView)
-                lastTooltipView?.remove()
-            }
-            lastTooltipView = null
-        }
+//        if (lastTooltipView != null) {
+//            val parent = mNotificationsContentView.parent
+//            if (parent != null) {
+//                (parent as ViewGroup).removeView(mNotificationsContentView)
+//                lastTooltipView?.remove()
+//            }
+//            lastTooltipView = null
+//        }
         val newNotifications = notifications.filter { !it.read }
         val newNotificationsMap = newNotifications
             .groupBy { it.type }
@@ -78,28 +78,27 @@ class InstagramBottomNavigation(
                 textView.text = count.toString()
             }
         }
-        with(mNotificationsContentView) {
-            setCount(likes_image, likes_count_text, NotificationType.Like)
-            setCount(follows_image, follows_count_text, NotificationType.Follow)
-            setCount(comments_image, comments_count_text, NotificationType.Comment)
-        }
+//        with(mNotificationsContentView) {
+//            setCount(likes_image, likes_count_text, NotificationType.Like)
+//            setCount(follows_image, follows_count_text, NotificationType.Follow)
+//            setCount(comments_image, comments_count_text, NotificationType.Comment)
+//        }
 
-        if (newNotifications.isNotEmpty()) {
-            val tooltip = ToolTip()
-                .withColor(ContextCompat.getColor(activity, R.color.red))
-                .withContentView(mNotificationsContentView)
-                .withAnimationType(ToolTip.AnimationType.FROM_TOP)
-                .withShadow()
-            lastTooltipView = tooltipLayout.showToolTipForView(
-                tooltip, bnv.getIconAt(
-                    NOTIFICATION_ICON_POS
-                )
-            )
-            lastTooltipView?.setOnClickListener {
-                mViewModel.setNotificationsAsRead(newNotifications)
-                bnv.getBottomNavigationItemView(NOTIFICATION_ICON_POS).callOnClick()
-            }
-        }
+//        if (newNotifications.isNotEmpty()) {
+//            val tooltip = ToolTip()
+//                .withColor(ContextCompat.getColor(activity, R.color.red))
+//                .withContentView(mNotificationsContentView)
+//                .withAnimationType(ToolTip.AnimationType.NONE)
+//            lastTooltipView = tooltipLayout.showToolTipForView(
+//                tooltip, bnv.getIconAt(
+//                    NOTIFICATION_ICON_POS
+//                )
+//            )
+//            lastTooltipView?.setOnClickListener {
+//                mViewModel.setNotificationsAsRead(newNotifications)
+//                bnv.getBottomNavigationItemView(NOTIFICATION_ICON_POS).callOnClick()
+//            }
+//        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

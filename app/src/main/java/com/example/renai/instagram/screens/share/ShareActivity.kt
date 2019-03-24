@@ -16,6 +16,11 @@ class ShareActivity : BaseActivity() {
     private lateinit var mUser: User
     private val dialog = LoadingDialog()
 
+    companion object {
+        const val REQUEST_CAMERA_CODE = 13
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_share)
@@ -47,7 +52,7 @@ class ShareActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == mCamera.REQUEST_CODE) {
+        if (requestCode == REQUEST_CAMERA_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 post_image.loadImage(mCamera.imageUri?.toString())
             } else {
