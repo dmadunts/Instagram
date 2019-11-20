@@ -16,7 +16,8 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
     override fun createFeedPost(uid: String, feedPost: FeedPost): Task<Unit> {
 
         val reference = database.child("feed-posts").child(uid).push()
-        return reference.setValue(feedPost).toUnit().addOnSuccessListener {
+        return reference.setValue(feedPost).toUnit()
+            .addOnSuccessListener {
             EventBus.publish(Event.CreateFeedPost(feedPost.copy(id = reference.key!!)))
         }
     }
@@ -25,7 +26,6 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
         FirebaseLiveData(database.child("likes").child(postId)).map {
             it.children.map { FeedPostLike(it.key) }
         }
-
 
     override fun toggleLike(postId: String, uid: String): Task<Unit> {
         val reference = database.child("likes")
@@ -55,9 +55,8 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
             it.asFeedPost()!!
         }
 
-
     override fun copyFeedPosts(postsAuthorUid: String, uid: String): Task<Unit> =
-        task<Unit> { taskSource ->
+        task { taskSource ->
             database.child("feed-posts").child(postsAuthorUid)
                 .orderByChild("uid")
                 .equalTo(postsAuthorUid)
@@ -76,7 +75,7 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
         }
 
     override fun removeFeedPosts(postsAuthorUid: String, uid: String): Task<Unit> =
-        task<Unit> { taskSource ->
+        task { taskSource ->
             database.child("feed-posts").child(postsAuthorUid)
                 .orderByChild("uid")
                 .equalTo(postsAuthorUid)

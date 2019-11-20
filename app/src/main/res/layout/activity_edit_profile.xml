@@ -41,6 +41,14 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
+
+            <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="@style/icon"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
     <ScrollView
@@ -206,7 +214,7 @@
                     app:layout_constraintTop_toBottomOf="@id/phone_input"/>
 
             <Spinner
-                    android:id="@+id/edit_profile_spinner"
+                    android:id="@+id/gender_selector"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/gender_label"

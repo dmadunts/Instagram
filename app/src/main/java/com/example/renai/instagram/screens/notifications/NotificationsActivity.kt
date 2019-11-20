@@ -25,16 +25,17 @@ class NotificationsActivity : BaseActivity() {
             setupBottomNavigation(uid, 3)
             mViewModel = initViewModel()
             mViewModel.init(uid)
+
+            mAdapter = NotificationsAdapter()
+            notifications_recycler.layoutManager = LinearLayoutManager(this)
+            notifications_recycler.adapter = mAdapter
+
             mViewModel.notifications.observe(this, Observer {
                 it?.let {
                     mAdapter.updateNotifications(it)
                     mViewModel.setNotificationsAsRead(it)
                 }
             })
-
-            mAdapter = NotificationsAdapter()
-            notifications_recycler.layoutManager = LinearLayoutManager(this)
-            notifications_recycler.adapter = mAdapter
         }
     }
 }

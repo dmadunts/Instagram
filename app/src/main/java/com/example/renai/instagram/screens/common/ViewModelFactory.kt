@@ -39,7 +39,7 @@ class ViewModelFactory(
                 return EditProfileViewModel(onFailureListener, usersRepository) as T
 
             modelClass.isAssignableFrom(HomeViewModel::class.java) ->
-                return HomeViewModel(onFailureListener, feedPostsRepository) as T
+                return HomeViewModel(onFailureListener, feedPostsRepository, usersRepository) as T
 
             modelClass.isAssignableFrom(ProfileSettingsViewModel::class.java) ->
                 return ProfileSettingsViewModel(authManager, onFailureListener) as T
@@ -68,7 +68,7 @@ class ViewModelFactory(
                 return CommentsViewModel(feedPostsRepository, onFailureListener, usersRepository) as T
 
             modelClass.isAssignableFrom(NotificationsViewModel::class.java) ->
-                return NotificationsViewModel(notificationsRepository, onFailureListener) as T
+                return NotificationsViewModel(usersRepository, notificationsRepository, onFailureListener) as T
 
             modelClass.isAssignableFrom(SearchViewModel::class.java) ->
                 return SearchViewModel(searchPostsRepository, onFailureListener) as T

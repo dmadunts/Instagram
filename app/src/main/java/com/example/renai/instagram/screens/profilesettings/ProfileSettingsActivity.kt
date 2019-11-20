@@ -3,6 +3,7 @@ package com.example.renai.instagram.screens.profilesettings
 import android.os.Bundle
 import com.example.renai.instagram.R
 import com.example.renai.instagram.screens.common.BaseActivity
+import com.example.renai.instagram.screens.common.LoadingDialog
 import com.example.renai.instagram.screens.common.setupAuthGuard
 import kotlinx.android.synthetic.main.activity_profile_settings.*
 

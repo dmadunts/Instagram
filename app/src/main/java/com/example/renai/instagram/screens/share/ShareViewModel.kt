@@ -19,7 +19,11 @@ class ShareViewModel(
     private val _shareCompletedEvent = SingleLiveEvent<Unit>()
     val shareComletedEvent = _shareCompletedEvent
 
+    private val _shareStartedEvent = SingleLiveEvent<Unit>()
+    val shareStartedEvent = _shareStartedEvent
+
     fun share(user: User, caption: String, imageUri: Uri?) {
+        _shareStartedEvent.call()
         if (imageUri != null) {
             usersRepository.uploadUserImage(user.uid, imageUri).onSuccessTask { downloadUrl ->
                 Tasks.whenAll(
@@ -28,9 +32,9 @@ class ShareViewModel(
                         user.uid,
                         makeFeedPost(user, caption, downloadUrl.toString())
                     )
-                )
-            }.addOnCompleteListener {
-                _shareCompletedEvent.call()
+                ).addOnCompleteListener {
+                    _shareCompletedEvent.call()
+                }
             }.addOnFailureListener(onFailureListener)
         }
     }

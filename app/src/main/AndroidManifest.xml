@@ -4,6 +4,7 @@
           package="com.example.renai.instagram">
 
     <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -23,7 +24,7 @@
         <activity android:name=".screens.notifications.NotificationsActivity"/>
         <activity android:name=".screens.share.ShareActivity"/>
         <activity android:name=".screens.profile.ProfileActivity"/>
-        <activity android:name=".screens.search.SearchActivity"/>
+        <activity android:name=".screens.search.SearchActivity" android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".screens.editprofile.EditProfileActivity"/>
         <activity android:name=".screens.profilesettings.ProfileSettingsActivity"/>
         <activity android:name="com.example.renai.instagram.screens.addfriends.AddFriendsActivity"/>
@@ -31,6 +32,7 @@
                 android:name=".screens.login.LoginActivity"
                 android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
+        <activity android:name=".screens.common.WebViewActivity"/>
         <activity
                 android:name=".screens.register.RegisterActivity"
                 android:windowSoftInputMode="stateVisible|adjustResize">

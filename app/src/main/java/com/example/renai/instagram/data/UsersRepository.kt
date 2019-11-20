@@ -2,8 +2,10 @@ package com.example.renai.instagram.data
 
 import android.arch.lifecycle.LiveData
 import android.net.Uri
+import com.example.renai.instagram.data.firebase.FirebaseUsersRepository
 import com.example.renai.instagram.models.User
 import com.google.android.gms.tasks.Task
+
 
 interface UsersRepository {
     fun uploadUserPhoto(localImage: Uri): Task<Uri>

@@ -29,7 +29,7 @@
                     />
 
             <TextView
-                    android:id="@+id/username_text"
+                    android:id="@+id/username_title_text"
                     android:text="@string/new_post"
                     style="@style/toolbar_title"
                     android:textColor="@color/black"

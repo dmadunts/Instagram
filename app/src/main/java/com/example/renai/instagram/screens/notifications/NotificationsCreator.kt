@@ -9,7 +9,6 @@ import com.example.renai.instagram.data.FeedPostsRepository
 import com.example.renai.instagram.data.NotificationsRepository
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.observeFirstNotNull
-import com.example.renai.instagram.data.common.zip
 import com.example.renai.instagram.models.Notification
 import com.example.renai.instagram.models.NotificationType
 
@@ -34,13 +33,15 @@ class NotificationsCreator(
                                 .addOnFailureListener { Log.d(TAG, "Failed to create notification", it) }
                         }
                     }
+
+                    //TODO Needs refactor: add observeFirstNotNull
                     is Event.CreateLike -> {
                         Log.d("NotificationCreator", "Notification observed")
 
-                        val userData = usersRepository.getUser(event.uid)
-                        val postData = feedPostsRepository.getFeedPost(event.uid, event.postId)
+                        val user = usersRepository.getUser(event.uid).value
+                        val post = feedPostsRepository.getFeedPost(event.uid, event.postId).value
+                        if (user != null && post != null) {
 
-                        userData.zip(postData).observeFirstNotNull(this) { (user, post) ->
                             val notification = Notification(
                                 uid = user.uid,
                                 username = user.username,
@@ -53,6 +54,26 @@ class NotificationsCreator(
                                 .addOnFailureListener { Log.d(TAG, "Failed to create notification", it) }
                             Log.d("NotificationCreator", "Notification created")
                         }
+
+                        //TODO look at this later, may cause problems with NotificationsActivity
+                        //I removed this code because it make FeedPost's heart-animation freeze
+                        //Seems like this mapping was needed to guarantee user's data
+                        //and post data not null, cuz data request to Database not always have time to return a value.
+                        //link https://firebase.google.com/docs/database/android/read-and-write
+
+//                                userData.zip(postData).observeFirstNotNull(this) { (user, post) ->
+//                                    val notification = Notification(
+//                                        uid = user.uid,
+//                                        username = user.username,
+//                                        photo = user.photo,
+//                                        postId = post.id,
+//                                        postImage = post.image,
+//                                        type = NotificationType.Like
+//                                    )
+//                                    notificationsRepository.createNotification(post.uid, notification)
+//                                        .addOnFailureListener { Log.d(TAG, "Failed to create notification", it) }
+//                                    Log.d("NotificationCreator", "Notification created")
+//                                }
                     }
                     is Event.CreateComment -> {
                         feedPostsRepository.getFeedPost(event.comment.uid, event.postId)

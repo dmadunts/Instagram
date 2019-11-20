@@ -2,9 +2,8 @@ package com.example.renai.instagram.data.firebase
 
 import android.arch.lifecycle.LiveData
 import android.net.Uri
-import com.example.renai.instagram.common.Event
-import com.example.renai.instagram.common.EventBus
-import com.example.renai.instagram.common.toUnit
+import android.util.Log
+import com.example.renai.instagram.common.*
 import com.example.renai.instagram.data.UsersRepository
 import com.example.renai.instagram.data.common.map
 import com.example.renai.instagram.data.firebase.common.FirebaseLiveData
@@ -18,6 +17,7 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.database.DataSnapshot
 
 class FirebaseUsersRepository : UsersRepository {
+
     override fun setUserImage(uid: String, imageDownloadUri: Uri): Task<Unit> {
         return database.child("images").child(uid)
             .push().setValue(imageDownloadUri.toString()).toUnit()
@@ -41,17 +41,11 @@ class FirebaseUsersRepository : UsersRepository {
             Tasks.forResult(signInMethods.isNotEmpty())
         }
 
-
     override fun getImages(uid: String): LiveData<List<String>> {
         return FirebaseLiveData(database.child("images").child(uid)).map {
             it.children.map { it.getValue(String::class.java)!! }.sortedDescending()
         }
     }
-
-    override fun getUsers(): LiveData<List<User>> =
-        FirebaseLiveData(database.child("users")).map {
-            it.children.map { it.asUser()!! }
-        }
 
     override fun addFollow(userUid: String, followUid: String): Task<Unit> =
         getFollowsRef(userUid, followUid).setValue(true).toUnit()
@@ -82,6 +76,7 @@ class FirebaseUsersRepository : UsersRepository {
         if (newUser.phone != currentUser.phone) updatesMap["phone"] = newUser.phone
         if (newUser.email != currentUser.email) updatesMap["email"] = newUser.email
         if (newUser.website != currentUser.website) updatesMap["website"] = newUser.website
+        if (newUser.gender != currentUser.gender) updatesMap["gender"] = newUser.gender
         return database.child("users").child(currentUid()!!).updateChildren(updatesMap).toUnit()
     }
 
@@ -113,6 +108,11 @@ class FirebaseUsersRepository : UsersRepository {
     override fun getUser(uid: String): LiveData<User> =
         FirebaseLiveData(database.child("users").child(uid)).map {
             it.asUser()!!
+        }
+
+    override fun getUsers(): LiveData<List<User>> =
+        FirebaseLiveData(database.child("users")).map {
+            it.children.map { it.asUser()!! }
         }
 
     private fun DataSnapshot.asUser(): User? = getValue(User::class.java)?.copy(uid = key!!)

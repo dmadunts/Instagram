@@ -6,16 +6,20 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.renai.instagram.R
 import com.example.renai.instagram.models.User
-import com.example.renai.instagram.screens.common.BaseActivity
-import com.example.renai.instagram.screens.common.CameraHelper
-import com.example.renai.instagram.screens.common.loadImage
-import com.example.renai.instagram.screens.common.setupAuthGuard
+import com.example.renai.instagram.screens.common.*
+import com.example.renai.instagram.screens.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_share.*
 
 class ShareActivity : BaseActivity() {
     private lateinit var mViewModel: ShareViewModel
     private lateinit var mCamera: CameraHelper
     private lateinit var mUser: User
+    private val dialog = LoadingDialog()
+
+    companion object {
+        const val REQUEST_CAMERA_CODE = 13
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +37,22 @@ class ShareActivity : BaseActivity() {
                 }
             })
 
-            mViewModel.shareComletedEvent.observe(this, Observer { finish() })
+            mViewModel.shareStartedEvent.observe(this, Observer {
+                dialog.show(supportFragmentManager, "Loading dialog")
+            })
+
+            mViewModel.shareComletedEvent.observe(this, Observer {
+                dialog.dismiss()
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+            })
         }
         back_image.setOnClickListener { finish() }
         share_text.setOnClickListener { share() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == mCamera.REQUEST_CODE) {
+        if (requestCode == REQUEST_CAMERA_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 post_image.loadImage(mCamera.imageUri?.toString())
             } else {

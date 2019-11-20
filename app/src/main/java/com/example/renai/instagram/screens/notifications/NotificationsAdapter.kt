@@ -10,7 +10,7 @@ import com.example.renai.instagram.common.SimpleCallback
 import com.example.renai.instagram.common.formatRelativeTimestamp
 import com.example.renai.instagram.models.Notification
 import com.example.renai.instagram.models.NotificationType
-import com.example.renai.instagram.screens.common.loadImage
+import com.example.renai.instagram.models.User
 import com.example.renai.instagram.screens.common.loadImageOrHide
 import com.example.renai.instagram.screens.common.loadUserPhoto
 import com.example.renai.instagram.screens.common.setCaptionText
@@ -28,6 +28,7 @@ class NotificationsAdapter : RecyclerView.Adapter<NotificationsAdapter.ViewHolde
     }
 
 
+    //TODO Needs refactor
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notification = notifications[position]
         with(holder.view) {
