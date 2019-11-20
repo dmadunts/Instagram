@@ -27,7 +27,6 @@ class FirebaseFeedPostsRepository : FeedPostsRepository {
             it.children.map { FeedPostLike(it.key) }
         }
 
-
     override fun toggleLike(postId: String, uid: String): Task<Unit> {
         val reference = database.child("likes")
             .child(postId).child(uid)

@@ -19,16 +19,16 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity(), FeedAdapter.Listener {
 
-    override fun showPostContextMenu(view: View) {
-        registerForContextMenu(view)
-        view.showContextMenu()
-    }
-
     private lateinit var mAdapter: FeedAdapter
     private lateinit var mViewModel: HomeViewModel
 
     companion object {
         const val TAG = "HomeActivity"
+    }
+
+    override fun showPostContextMenu(view: View) {
+        registerForContextMenu(view)
+        view.showContextMenu()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
