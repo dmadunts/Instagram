@@ -43,4 +43,8 @@ abstract class BaseActivity : AppCompatActivity() {
         finish()
         Log.d("BaseActivity", "goToLogin")
     }
+
+    fun setupAuthGuard(f: (String) -> Unit) {
+        AuthGuard(this, f)
+    }
 }

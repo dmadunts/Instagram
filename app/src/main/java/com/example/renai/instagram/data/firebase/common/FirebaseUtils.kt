@@ -7,7 +7,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 val auth: FirebaseAuth = FirebaseAuth.getInstance()
-val database: DatabaseReference = FirebaseDatabase.getInstance()
-    .reference
+val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 val storage: StorageReference = FirebaseStorage.getInstance().reference
 

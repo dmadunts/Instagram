@@ -28,8 +28,6 @@ class HomeViewModel(
             feedPosts = feedPostsRepository.getFeedPosts(uid).map {
                 it.sortedByDescending { it.timestampDate() }
             }
-
-
         }
     }
 

@@ -137,15 +137,15 @@ class EditProfileActivity : BaseActivity(), PasswordDialog.Listener {
         }
 
     private fun setProgressState() {
-        if (progressState) {
-            save_image.visibility = View.VISIBLE
-            progress_bar.visibility = View.GONE
-            progressState = false
-        } else {
-            progress_bar.visibility = View.VISIBLE
-            save_image.visibility = View.GONE
-            progressState = true
-        }
+            if (progressState) {
+                save_image.visibility = View.VISIBLE
+                progress_bar.visibility = View.GONE
+                progressState = false
+            } else {
+                progress_bar.visibility = View.VISIBLE
+                save_image.visibility = View.GONE
+                progressState = true
+            }
     }
 }
 

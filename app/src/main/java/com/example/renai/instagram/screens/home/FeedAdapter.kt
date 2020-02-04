@@ -36,10 +36,9 @@ class FeedAdapter(private val listener: Listener) :
     private val defaultPostLikes = FeedPostLikes(0, false)
 
     fun updatePostLikes(position: Int, likes: FeedPostLikes) {
-        postLikes += (position to likes)
+        postLikes = postLikes + (position to likes)
         notifyItemChanged(position)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
