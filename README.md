@@ -1,16 +1,18 @@
 <H1>About this app</H1>
 This is super simple Instagram-clone where I practiced my skills with Kotlin, MVVM, Firebase, Android Clean Architecture with manual Dependency Injection (without Dagger). <br>
-![Screenshot_1590261170](https://user-images.githubusercontent.com/26573832/82828954-a0b53000-9ecb-11ea-85ec-9861953b91a0.png)
-![Screenshot_1590261203](https://user-images.githubusercontent.com/26573832/82828956-a14dc680-9ecb-11ea-9f33-658141d912af.png)
-![Screenshot_1590261370](https://user-images.githubusercontent.com/26573832/82828957-a14dc680-9ecb-11ea-8c92-cbec3ba833d2.png)
-![Screenshot_1590261373](https://user-images.githubusercontent.com/26573832/82828959-a1e65d00-9ecb-11ea-86b1-57c5089afe96.png)
-![Screenshot_1590261382](https://user-images.githubusercontent.com/26573832/82828960-a1e65d00-9ecb-11ea-9fcf-ed4b96a52fcd.png)
-![Screenshot_1590261388](https://user-images.githubusercontent.com/26573832/82828962-a27ef380-9ecb-11ea-9c56-78e0b67b198d.png)
-![Screenshot_1590261398](https://user-images.githubusercontent.com/26573832/82828963-a3178a00-9ecb-11ea-9351-e8b07b784af6.png)
-![Screenshot_1590261405](https://user-images.githubusercontent.com/26573832/82828965-a3b02080-9ecb-11ea-9a5f-d9bd3a0dc8eb.png)
-![Screenshot_1590261452](https://user-images.githubusercontent.com/26573832/82828966-a3b02080-9ecb-11ea-99b8-11e20dc4b7dc.png)
-![Screenshot_1590261469](https://user-images.githubusercontent.com/26573832/82828967-a448b700-9ecb-11ea-9540-8be61cca128d.png)
-![Screenshot_1590261477](https://user-images.githubusercontent.com/26573832/82828968-a448b700-9ecb-11ea-8292-3bc94fd240b8.png)
+
+![screen_1](https://user-images.githubusercontent.com/26573832/82829385-90ea1b80-9ecc-11ea-9e9c-620886632b8f.png)
+![screen_2](https://user-images.githubusercontent.com/26573832/82829386-9182b200-9ecc-11ea-887d-8b1cd051541b.png)
+![screen_3](https://user-images.githubusercontent.com/26573832/82829387-9182b200-9ecc-11ea-92c2-7f664c47194a.png)
+![screen_4](https://user-images.githubusercontent.com/26573832/82829388-921b4880-9ecc-11ea-8228-ca670daaa853.png)
+![screen_5](https://user-images.githubusercontent.com/26573832/82829389-921b4880-9ecc-11ea-9876-5d69f1233472.png)
+![screen_6](https://user-images.githubusercontent.com/26573832/82829390-92b3df00-9ecc-11ea-8179-25bde857fe00.png)
+![screen_7](https://user-images.githubusercontent.com/26573832/82829391-934c7580-9ecc-11ea-8dfc-211966171667.png)
+![screen_8](https://user-images.githubusercontent.com/26573832/82829393-934c7580-9ecc-11ea-8040-0e8193135ace.png)
+![screen_9](https://user-images.githubusercontent.com/26573832/82829394-93e50c00-9ecc-11ea-82d7-4a8322d5e2d9.png)
+![screen_10](https://user-images.githubusercontent.com/26573832/82829395-93e50c00-9ecc-11ea-894b-711d2a3120ce.png)
+![screen_11](https://user-images.githubusercontent.com/26573832/82829396-947da280-9ecc-11ea-8786-7d93555b9011.png)
+
 
 <H1>TO USE THIS APP</H1>
 1. Register to <a href="https://firebase.google.com/">firebase</a> and create firebase application</br>
